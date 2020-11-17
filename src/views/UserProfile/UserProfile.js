@@ -13,7 +13,7 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
-import avatar from "assets/img/faces/marc.jpg";
+import avatar from "assets/img/faces/gerson.jpg";
 
 const styles = {
   cardCategoryWhite: {
@@ -44,8 +44,8 @@ export default function UserProfile() {
         <GridItem xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile</p>
+              <h4 className={classes.cardTitleWhite}>Cadastrar Membro</h4>
+              <p className={classes.cardCategoryWhite}>Preencha as informações do membro</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
@@ -147,7 +147,7 @@ export default function UserProfile() {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+              <Button color="primary">Cadastrar</Button>
             </CardFooter>
           </Card>
         </GridItem>
@@ -159,15 +159,13 @@ export default function UserProfile() {
               </a>
             </CardAvatar>
             <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
+              <h6 className={classes.cardCategory}>Pastor Dirigente</h6>
+              <h4 className={classes.cardTitle}>Gerson Mendes</h4>
               <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
+                Estudou Teologica na instituição de ensino Fatece
               </p>
               <Button color="primary" round>
-                Follow
+                Seguir
               </Button>
             </CardBody>
           </Card>
