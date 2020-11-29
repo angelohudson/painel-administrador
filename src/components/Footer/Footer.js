@@ -24,7 +24,7 @@ export default function Footer(props) {
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               <a href="#company" className={classes.block}>
-                Company
+                IGREJA
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>

@@ -9,6 +9,13 @@ import Input from "@material-ui/core/Input";
 // @material-ui/icons
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
+
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+
 // core components
 import styles from "assets/jss/material-dashboard-react/components/customInputStyle.js";
 
@@ -23,7 +30,12 @@ export default function CustomInput(props) {
     labelProps,
     inputProps,
     error,
-    success
+    success,
+    type,
+    selectedDate,
+    handleDateChange,
+    labelDate,
+    format
   } = props;
 
   const labelClasses = classNames({
@@ -52,15 +64,30 @@ export default function CustomInput(props) {
           {labelText}
         </InputLabel>
       ) : null}
-      <Input
-        classes={{
-          root: marginTop,
-          disabled: classes.disabled,
-          underline: underlineClasses
-        }}
-        id={id}
-        {...inputProps}
-      />
+      {type === "date" ? (
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            style={{marginTop: 0}}
+            margin="normal"
+            id="date-picker-dialog"
+            label={labelDate}
+            format={format}
+            value={selectedDate}
+            onChange={handleDateChange}
+          />
+        </MuiPickersUtilsProvider>
+      ) : (
+          <Input
+            classes={{
+              root: marginTop,
+              disabled: classes.disabled,
+              underline: underlineClasses
+            }}
+            id={id}
+            {...inputProps}
+          />
+        )}
+
       {error ? (
         <Clear className={classes.feedback + " " + classes.labelRootError} />
       ) : success ? (

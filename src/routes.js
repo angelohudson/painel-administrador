@@ -16,42 +16,61 @@
 
 */
 // @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import Person from "@material-ui/icons/Person";
-import Notifications from "@material-ui/icons/Notifications";
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import EventIcon from '@material-ui/icons/Event';
+import AppsIcon from '@material-ui/icons/Apps';
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
-import NotificationsPage from "views/Notifications/Notifications.js";
+import Activities from "views/Activities/Activities.js";
+import Calendar from "views/Calendar/Calendar.js";
+import Ministries from "views/Ministries/Ministries.js";
+
 
 const dashboardRoutes = [
   {
-    path: "/dashboard",
-    name: "Painel",
-    icon: Dashboard,
-    component: DashboardPage,
-    layout: "/admin"
-  },
-  {
-    path: "/user",
-    name: "Adicionar Membro",
-    icon: Person,
-    component: UserProfile,
+    path: "/ministries",
+    name: "Meus Ministérios",
+    icon: AppsIcon,
+    component: Ministries,
     layout: "/admin"
   },
   {
     path: "/table",
-    name: "Lista de Membros",
+    name: "Cadastro no Ministério",
     icon: "content_paste",
     component: TableList,
     layout: "/admin"
   },
   {
-    path: "/notifications",
-    name: "Solicitações",
-    icon: Notifications,
-    component: NotificationsPage,
+    path: "/dashboard",
+    name: "Relatórios",
+    icon: TrendingUpIcon,
+    component: DashboardPage,
+    layout: "/admin"
+  },
+  {
+    path: "/calendar",
+    name: "Agenda",
+    icon: EventIcon,
+    component: Calendar,
+    layout: "/admin"
+  },
+  {
+    path: "/activities",
+    name: "Cadastro de Atividade",
+    icon: AssignmentIcon,
+    component: Activities,
+    layout: "/admin"
+  },
+  {
+    path: "/user",
+    name: "Cadastro de Membro",
+    icon: Person,
+    component: UserProfile,
     layout: "/admin"
   }
 ];

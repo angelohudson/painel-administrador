@@ -36,8 +36,8 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function UserProfile() {
-  const [selectedDate, setSelectedDate] = React.useState(new Date('1997-08-12T00:00:00'));
+export default function Activities() {
+  const [selectedDate, setSelectedDate] = React.useState(new Date('2020-11-29T00:00:00'));
   const classes = useStyles();
 
   const handleDateChange = (date) => {
@@ -50,28 +50,15 @@ export default function UserProfile() {
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Cadastrar Membro</h4>
-              <p className={classes.cardCategoryWhite}>Preencha as informações do membro</p>
+              <h4 className={classes.cardTitleWhite}>Cadastrar Atividade</h4>
+              <p className={classes.cardCategoryWhite}>Preencha as informações da atividade</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={8}>
+                <GridItem xs={12} sm={12} md={12}>
                   <CustomInput
-                    labelText="Nome"
+                    labelText="Título da Atividade"
                     id="username"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Email"
-                    id="emimport {
-                      MuiPickersUtilsProvider,
-                      KeyboardTimePicker,
-                      KeyboardDatePicker,
-                    } from '@material-ui/pickers';ail-address"
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -79,25 +66,55 @@ export default function UserProfile() {
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={12}>
                   <CustomInput
-                    labelText="Telefone"
-                    id="telefone"
+                    labelText="Local da Atividade"
+                    id="local"
                     formControlProps={{
                       fullWidth: true
                     }}
                   />
                 </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     id="birthday"
                     type="date"
-                    labelDate="Data de nascimento"
                     selectedDate={selectedDate}
+                    labelDate="Data de inicio da atividade"
                     handleDateChange={handleDateChange}
-                    format="dd/MM/yyyy"
+                    format="dd/MM/yyyy HH:mm"
                     formControlProps={{
                       fullWidth: true
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6}>
+                  <CustomInput
+                    id="birthday"
+                    type="date"
+                    selectedDate={selectedDate}
+                    labelDate="Data de término da atividade"
+                    handleDateChange={handleDateChange}
+                    format="dd/MM/yyyy HH:mm"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  <CustomInput
+                    labelText="Descrição da atividade"
+                    id="about-me"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 5
                     }}
                   />
                 </GridItem>

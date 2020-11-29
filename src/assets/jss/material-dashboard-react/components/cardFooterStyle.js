@@ -6,7 +6,7 @@ const cardFooterStyle = {
     paddingTop: "10px",
     margin: "0 15px 10px",
     borderRadius: "0",
-    justifyContent: "space-between",
+    justifyContent: "right",
     alignItems: "center",
     display: "flex",
     backgroundColor: "transparent",
@@ -28,8 +28,8 @@ const cardFooterStyle = {
       top: "4px",
       marginRight: "3px",
       marginLeft: "3px",
-      width: "16px",
-      height: "16px"
+      width: "25px",
+      height: "25px"
     },
     "& .fab,& .fas,& .far,& .fal,& .material-icons": {
       fontSize: "16px",
