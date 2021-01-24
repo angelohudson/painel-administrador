@@ -38,34 +38,34 @@ const dashboardRoutes = [
     component: Ministries,
     layout: "/admin"
   },
-  {
-    path: "/table",
-    name: "Cadastro no Ministério",
-    icon: "content_paste",
-    component: TableList,
-    layout: "/admin"
-  },
-  {
-    path: "/dashboard",
-    name: "Relatórios",
-    icon: TrendingUpIcon,
-    component: DashboardPage,
-    layout: "/admin"
-  },
-  {
-    path: "/calendar",
-    name: "Agenda",
-    icon: EventIcon,
-    component: Calendar,
-    layout: "/admin"
-  },
-  {
-    path: "/activities",
-    name: "Cadastro de Atividade",
-    icon: AssignmentIcon,
-    component: Activities,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/table",
+  //   name: "Cadastro no Ministério",
+  //   icon: "content_paste",
+  //   component: TableList,
+  //   layout: "/admin"
+  // },
+  // {
+  //   path: "/dashboard",
+  //   name: "Relatórios",
+  //   icon: TrendingUpIcon,
+  //   component: DashboardPage,
+  //   layout: "/admin"
+  // },
+  // {
+  //   path: "/calendar",
+  //   name: "Agenda",
+  //   icon: EventIcon,
+  //   component: Calendar,
+  //   layout: "/admin"
+  // },
+  // {
+  //   path: "/activities",
+  //   name: "Cadastro de Atividade",
+  //   icon: AssignmentIcon,
+  //   component: Activities,
+  //   layout: "/admin"
+  // },
   {
     path: "/user",
     name: "Cadastro de Membro",

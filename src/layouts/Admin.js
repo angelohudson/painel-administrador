@@ -13,6 +13,9 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 
+import UserService from 'services/userService'
+import { NotificationManager } from 'react-notifications';
+
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
@@ -74,6 +77,10 @@ export default function Admin({ ...rest }) {
       setMobileOpen(false);
     }
   };
+  // verifies if routeName is the one active (in browser input)
+  function activeRoute(routeName) {
+    return window.location.href.indexOf(routeName) > -1 ? true : false;
+  }
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -92,11 +99,19 @@ export default function Admin({ ...rest }) {
       window.removeEventListener("resize", resizeFunction);
     };
   }, [mainPanel]);
+
+  React.useEffect(() => {
+    if (!UserService.hasLoggedUser()) {
+      rest.history.push('/login')
+      NotificationManager.warning('Por favor, autentique-se');
+      return
+    }
+  }, []);
   return (
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"AD Timbó"}
+        logoText={"Ad Timbó"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}
@@ -104,7 +119,7 @@ export default function Admin({ ...rest }) {
         color={color}
         {...rest}
       />
-      <div className={classes.mainPanel} ref={mainPanel}>
+      <div className={activeRoute("admin/ministries") ? classes.ministriesPanel : classes.mainPanel} ref={mainPanel}>
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
@@ -116,8 +131,8 @@ export default function Admin({ ...rest }) {
             <div className={classes.container}>{switchRoutes}</div>
           </div>
         ) : (
-          <div className={classes.map}>{switchRoutes}</div>
-        )}
+            <div className={classes.map}>{switchRoutes}</div>
+          )}
         {getRoute() ? <Footer /> : null}
         <FixedPlugin
           handleImageClick={handleImageClick}

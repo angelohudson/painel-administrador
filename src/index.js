@@ -22,9 +22,12 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
-import RTL from "layouts/RTL.js";
+import LoginPage from "views/LoginPage/LoginPage.js"
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
+import './config/axios.js'
+import { NotificationContainer } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 const hist = createBrowserHistory();
 
@@ -32,9 +35,10 @@ ReactDOM.render(
   <Router history={hist}>
     <Switch>
       <Route path="/admin" component={Admin} />
-      <Route path="/rtl" component={RTL} />
-      <Redirect from="/" to="/admin/dashboard" />
+      <Route path="/login" component={LoginPage} />
+      <Redirect from="/" to="/admin/user" />
     </Switch>
+    <NotificationContainer />
   </Router>,
   document.getElementById("root")
 );
