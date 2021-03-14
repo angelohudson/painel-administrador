@@ -23,8 +23,10 @@ export default function Tasks(props) {
     const newChecked = [...checked];
     if (currentIndex === -1) {
       newChecked.push(value);
+      props.tableSetCheckedIndex(oldArray => [...oldArray, value]);
     } else {
       newChecked.splice(currentIndex, 1);
+      props.tableSetCheckedIndex(props.checkedIndexes.filter(item => item !== value));
     }
     setChecked(newChecked);
   };

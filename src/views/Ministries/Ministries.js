@@ -1,12 +1,14 @@
 import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import AssignmentIndOutlinedIcon from '@material-ui/icons/AssignmentIndOutlined';
 import FolderOutlinedIcon from '@material-ui/icons/FolderOutlined';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
+import CardActionArea from '@material-ui/core/CardActionArea';
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
@@ -69,90 +71,46 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function Ministries() {
+export default function Ministries(props) {
     const classes = useStyles();
+    const [ministries, setMinistries] = React.useState({ ...props.ministries });
+    const [loading, setLoading] = React.useState({ ...props.loading });
+
+    React.useEffect(() => {
+        props.changeMinistrie("None");
+    }, [])
+
+    React.useEffect(() => {
+        setMinistries(props.ministries);
+    }, [props.ministries])
+
+    React.useEffect(() => {
+        setLoading(props.loading);
+    }, [props.loading])
+
     return (
-        <GridContainer>
-            <GridItem xs={12} sm={12} md={4}>
-                <Card>
-                    <CardHeader color="primary">
-                        <h4 className={classes.cardTitleWhite}>Ministério de Louvor</h4>
-                        <p className={classes.cardCategoryWhite}>Líder - Paulo Aquino</p>
-                    </CardHeader>
-                    <CardBody>
-                    </CardBody>
-                    <CardFooter stats={styles.stats}>
-                        <div className={styles.stats}>
-                            <AssignmentIndOutlinedIcon />
-                            <FolderOutlinedIcon />
-                        </div>
-                    </CardFooter>
-                </Card>
-            </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-                <Card>
-                    <CardHeader color="danger">
-                        <h4 className={classes.cardTitleWhite}>Secretaria</h4>
-                        <p className={classes.cardCategoryWhite}>Líder - Geska Mendes</p>
-                    </CardHeader>
-                    <CardBody>
-                    </CardBody>
-                    <CardFooter stats={styles.stats}>
-                        <div className={styles.stats}>
-                            <AssignmentIndOutlinedIcon />
-                            <FolderOutlinedIcon />
-                        </div>
-                    </CardFooter>
-                </Card>
-            </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-                <Card>
-                    <CardHeader color="success">
-                        <h4 className={classes.cardTitleWhite}>Ministério de Jovens</h4>
-                        <p className={classes.cardCategoryWhite}>Líder - Pr. Gerson Mendes</p>
-                    </CardHeader>
-                    <CardBody>
-                    </CardBody>
-                    <CardFooter stats={styles.stats}>
-                        <div className={styles.stats}>
-                            <AssignmentIndOutlinedIcon />
-                            <FolderOutlinedIcon />
-                        </div>
-                    </CardFooter>
-                </Card>
-            </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-                <Card>
-                    <CardHeader color="success">
-                        <h4 className={classes.cardTitleWhite}>Ministério Infantil</h4>
-                        <p className={classes.cardCategoryWhite}>Líder - Geska Mendes</p>
-                    </CardHeader>
-                    <CardBody>
-                    </CardBody>
-                    <CardFooter stats={styles.stats}>
-                        <div className={styles.stats}>
-                            <AssignmentIndOutlinedIcon />
-                            <FolderOutlinedIcon />
-                        </div>
-                    </CardFooter>
-                </Card>
-            </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-                <Card>
-                    <CardHeader color="primary">
-                        <h4 className={classes.cardTitleWhite}>Coral</h4>
-                        <p className={classes.cardCategoryWhite}>Líder - Gizelle Mendes</p>
-                    </CardHeader>
-                    <CardBody>
-                    </CardBody>
-                    <CardFooter stats={styles.stats}>
-                        <div className={styles.stats}>
-                            <AssignmentIndOutlinedIcon />
-                            <FolderOutlinedIcon />
-                        </div>
-                    </CardFooter>
-                </Card>
-            </GridItem>
-        </GridContainer>
+        loading ?
+            <LinearProgress /> :
+            <GridContainer>
+                {ministries.map((value, index) => {
+                    return (
+                        <GridItem key={index} xs={12} sm={12} md={4}>
+                            <Card >
+                                <CardActionArea onClick={() => props.changeMinistrie(value.titulo)}>
+                                    <CardHeader color="primary">
+                                        <h4 className={classes.cardTitleWhite}>{value.titulo}</h4>
+                                    </CardHeader>
+                                    <CardBody>
+                                    </CardBody>
+                                    <CardFooter stats={styles.stats}>
+                                        <div className={styles.stats}>
+                                            <FolderOutlinedIcon />
+                                        </div>
+                                    </CardFooter>
+                                </CardActionArea>
+                            </Card>
+                        </GridItem>)
+                })}
+            </GridContainer>
     );
 }

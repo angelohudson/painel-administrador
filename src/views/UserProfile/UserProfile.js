@@ -13,21 +13,23 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-// import CardAvatar from "components/Card/CardAvatar.js";
+import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import ImageUploader from 'react-images-upload';
 
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 
 import UserService from 'services/userService';
 import HttpService from 'services/httpService';
-// import avatar from "assets/img/faces/gerson.jpg";
 import { NotificationManager } from 'react-notifications';
 import { cpfMask, nameMask, phoneMask, cepMask } from 'utils/mask';
 
 import * as EmailValidator from 'email-validator';
 import { numberMask } from "utils/mask";
+
+import avatar from "assets/img/faces/default-user.jpg";
 
 const states = [
   {
@@ -161,7 +163,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function UserProfile() {
+export default function UserProfile(props) {
   const [selectedDate, setSelectedDate] = React.useState(new Date('1997-08-12T00:00:00'));
   const classes = useStyles();
   const [email, setEmail] = React.useState("");
@@ -177,7 +179,8 @@ export default function UserProfile() {
   const [uf, setUf] = React.useState("CE");
   const [birth, setBirth] = React.useState(`${selectedDate.getFullYear()}-${String(selectedDate.getMonth()).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`);
   const [takePicture, setTakePicture] = React.useState(false);
-  const [imageSrc, setImageSrc] = React.useState("");
+  const [imageSrc, setImageSrc] = React.useState(avatar);
+  const [photo, setPhoto] = React.useState();
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -224,7 +227,11 @@ export default function UserProfile() {
   function handleTakePicture() {
     setTakePicture(true);
   }
-
+  function onDrop(picture) {
+    console.log(picture[0]);
+    setPhoto(picture[0]);
+    setImageSrc(URL.createObjectURL(picture[0]));
+  }
 
   async function handleSubmit() {
     const user = UserService.getLoggedUser();
@@ -245,11 +252,13 @@ export default function UserProfile() {
       try {
         await HttpService.saveMember(user, member)
           .then((response) => {
-            UserService.saveLoggedUser(user);
-            NotificationManager.success(`Membro ${member.nome} cadastrado!`);
-            setEmail("");
-            setName("");
-            setPhone("");
+            console.log(response);
+            HttpService.savePhoto(user, response.data.id, photo)
+              .then((response) => {
+                UserService.saveLoggedUser(user);
+                NotificationManager.success(`Membro ${member.nome} cadastrado!`);
+                props.history.push('/admin/ministrie');
+              });
           });
       } catch (e) {
         console.log(e.message);
@@ -474,6 +483,26 @@ export default function UserProfile() {
                       value: number
                     }}
                   />
+                </GridItem>
+                <GridItem>
+                  <Card profile>
+                    <CardAvatar profile>
+                      <a href="#pablo">
+                        <img src={imageSrc} alt="..." />
+                      </a>
+                    </CardAvatar>
+                    <CardBody>
+                      <ImageUploader
+                        singleImage={true}
+                        withIcon={false}
+                        withLabel={false}
+                        buttonText='Escolha uma Foto'
+                        onChange={onDrop}
+                        imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                        maxFileSize={1048576}
+                      />
+                    </CardBody>
+                  </Card>
                 </GridItem>
               </GridContainer>
             </CardBody>

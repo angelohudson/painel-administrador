@@ -36,7 +36,7 @@ ReactDOM.render(
     <Switch>
       <Route path="/admin" component={Admin} />
       <Route path="/login" component={LoginPage} />
-      <Redirect from="/" to="/admin/user" />
+      <Redirect from="/" to="/admin/ministries" />
     </Switch>
     <NotificationContainer />
   </Router>,

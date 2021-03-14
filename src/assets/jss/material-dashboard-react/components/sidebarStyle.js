@@ -78,7 +78,7 @@ const sidebarStyle = theme => ({
   logoLink: {
     ...defaultFont,
     textTransform: "uppercase",
-    padding: "10px 85px",
+    padding: "0px 85px",
     display: "block",
     fontSize: "18px",
     textAlign: "left",
@@ -88,17 +88,32 @@ const sidebarStyle = theme => ({
     backgroundColor: "transparent",
     "&,&:hover": {
       color: whiteColor
-    }
+    },
+    marginTop: "20px"
   },
   logoLinkRTL: {
     textAlign: "right"
   },
   logoImage: {
-    width: "30px",
     display: "inline-block",
     maxHeight: "30px",
     marginLeft: "10px",
-    marginRight: "15px"
+    marginRight: "15px",
+    
+  },
+  logoMinistrie: {
+    ...defaultFont,
+    textTransform: "uppercase",
+    flex: 1,
+    width: "150px",
+    display: "flex",
+    justifyContent: "center",
+    maxHeight: "30px",
+    marginLeft: "50px",
+    backgroundColor: "transparent",
+    "&,&:hover": {
+      color: whiteColor
+    },
   },
   img: {
     width: "60px",

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
+import Tasks from "components/Tasks/Tasks.js";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
@@ -14,7 +15,8 @@ const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor } = props;
+  const { tableHead, tableData, tableHeaderColor, tableSelectable, tableCheckedIndex, tableSetCheckedIndex } = props;
+
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -31,24 +33,47 @@ export default function CustomTable(props) {
                   </TableCell>
                 );
               })}
+              {tableSelectable ?
+                <TableCell
+                  className={classes.tableCell + " " + classes.tableHeadCell}
+                >
+                  selecione
+                </TableCell> : null
+              }
             </TableRow>
           </TableHead>
         ) : null}
-        <TableBody>
-          {tableData.map((prop, key) => {
-            return (
-              <TableRow key={key} className={classes.tableBodyRow}>
-                {prop.map((prop, key) => {
-                  return (
-                    <TableCell className={classes.tableCell} key={key}>
-                      {prop}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            );
-          })}
-        </TableBody>
+        {
+          <TableBody>
+            {
+              tableData.map((prop, key) => {
+                const obj = prop;
+                return (
+                  <TableRow key={key} className={classes.tableBodyRow}>
+                    {tableHead.map((prop, key) => {
+                      const head = prop;
+                      return (
+                        <TableCell className={classes.tableCell} key={key}>
+                          {obj[head]}
+                        </TableCell>
+                      );
+                    })}
+                    {tableSelectable ?
+                      <TableCell className={classes.tableCell}>
+                        <Tasks
+                          checkedIndexes={tableCheckedIndex}
+                          tableSetCheckedIndex={tableSetCheckedIndex}
+                          tasksIndexes={[obj.id]}
+                          tasks={[""]}
+                        />
+                      </TableCell>
+                      : null
+                    }
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        }
       </Table>
     </div>
   );

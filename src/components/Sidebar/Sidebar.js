@@ -86,6 +86,11 @@ export default function Sidebar(props) {
           <img src={logo} alt="logo" className={classes.img} />
         </div>
       </a>
+      {props.ministrie !== "None" ?
+        <div className={classes.logoMinistrie}>
+          <h7>{props.ministrie}</h7>
+        </div> :
+        null}
     </div>
   );
   return (
@@ -108,6 +113,7 @@ export default function Sidebar(props) {
           {brand}
           <div className={classes.sidebarWrapper}>
             {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks {...props} />}
+            <h4>{props.ministries}</h4>
             {links}
           </div>
           {image !== undefined ? (
