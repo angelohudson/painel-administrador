@@ -57,17 +57,10 @@ export default function AssociateMembers(props) {
   async function getMembers() {
     try {
       const user = UserService.getLoggedUser()
-      await HttpService.getAllMembers(user)
+      await HttpService.getMembersNotAssociate(user, props.currentMinistrieObject.id)
         .then((response) => {
-            HttpService.getMembers(user, props.currentMinistrieObject.id)
-            .then((response2) => {
-                setMembers(response.data.filter(function(memberA){
-                  return !response2.data.find(function(memberB){
-                    return memberA.id === memberB.id;
-                  });
-                }));
-                setLoading(false);
-            })
+          setMembers(response.data);
+          setLoading(false);
         });
     } catch (e) {
       console.log(e.message);

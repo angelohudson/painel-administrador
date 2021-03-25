@@ -58,7 +58,7 @@ export default function AssociateLeaders(props) {
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
-      await HttpService.getMembers(user, props.currentMinistrieObject.id)
+      await HttpService.getMembersNotAssociateWithLeadership(user, props.currentMinistrieObject.id)
         .then((response) => {
           setMembers(response.data);
           setLoading(false);
@@ -71,7 +71,19 @@ export default function AssociateLeaders(props) {
   }
 
   async function doAssociate() {
-    console.log(tableCheckedIndex);
+    setLoading(true);
+    try {
+      const user = UserService.getLoggedUser()
+      await HttpService.associateLeadership(user, tableCheckedIndex, props.currentMinistrieObject.id)
+        .then((response) => {
+          setLoading(false);
+          props.history.push('/admin/leadership');
+        });
+    } catch (e) {
+      console.log(e.message);
+      NotificationManager.warning(e.message);
+      setLoading(false);
+    }
   }
 
   React.useEffect(() => {

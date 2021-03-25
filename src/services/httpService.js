@@ -51,8 +51,8 @@ class HttpService {
 		});
 	}
 
-	getAllMembers(user) {
-		const url = this._getUrl(`membro`);
+	getMembersNotAssociate(user, ministrieId) {
+		const url = this._getUrl(`membro/by-ministerio/` + ministrieId);
 		return axios(url, {
 			method: 'GET',
 			auth: user
@@ -79,11 +79,29 @@ class HttpService {
 		});
 	}
 
-	getLeadership(user) {
-		const url = this._getUrl(`lideranca`);
+	getLeadership(user, ministrieId) {
+		const url = this._getUrl(`lideranca/` + ministrieId);
 		return axios(url, {
 			method: 'GET',
 			auth: user
+		});
+	}
+
+	getMembersNotAssociateWithLeadership(user, ministrieId) {
+		const url = this._getUrl(`membro/lideranca-not-associate/` + ministrieId);
+		return axios(url, {
+			method: 'GET',
+			auth: user
+		});
+	}
+	
+	associateLeadership(user, leaders, ministrieId) {
+		const url = this._getUrl(`lideranca`);
+		const form = { "ministerioId": ministrieId, "membros": leaders };
+		return axios(url, {
+			method: 'POST',
+			auth: user,
+			data: form
 		});
 	}
 

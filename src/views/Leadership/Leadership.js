@@ -58,11 +58,11 @@ export default function Leadership(props) {
         setLoading(true);
         try {
             const user = UserService.getLoggedUser()
-            await HttpService.getLeadership(user)
+            console.log(props.currentMinistrieObject.id);
+            await HttpService.getLeadership(user, props.currentMinistrieObject.id)
                 .then((response) => {
-                    setLeaders(response.data.filter(function (leader) {
-                        return leader.ministerioDto.id === props.currentMinistrieObject.id;
-                    }).map(function (leader) {
+                    console.log(response);
+                    setLeaders(response.data.map(function (leader) {
                         return leader.membroDto;
                     }));
                     setLoading(false);
