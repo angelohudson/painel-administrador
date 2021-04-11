@@ -25,19 +25,23 @@ import Group from '@material-ui/icons/Group';
 
 import MemberList from "views/MemberList/MemberList.js";
 import AssociateMembers from "views/AssociateMembers/AssociateMembers.js";
+import AssociateMembersGroup from "views/AssociateMembersGroup/AssociateMembersGroup.js"
 import Activities from "views/Activities/Activities.js";
 import Leadership from "views/Leadership/Leadership.js";
 import AssociateLeaders from "views/AssociateLeaders/AssociateLeaders.js";
 
 import Groups from "views/Groups/Groups.js";
+import Functions from "views/Functions/Functions.js";
 import CreateGroup from "views/CreateGroup/CreateGroup.js";
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import Ministries from "views/Ministries/Ministries.js";
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import BuildIcon from '@material-ui/icons/Build';
 
 const commonRoute = [
   {
     path: "/ministries",
+    hidden: false,
     name: "Meus Ministérios",
     icon: AppsIcon,
     component: Ministries,
@@ -45,6 +49,7 @@ const commonRoute = [
   },
   {
     path: "/ministrie",
+    hidden: false,
     name: "Ministério",
     icon: "content_paste",
     component: MemberList,
@@ -52,6 +57,7 @@ const commonRoute = [
   },
   {
     path: "/associate-members",
+    hidden: true,
     name: "Associar Membros",
     icon: GroupAddIcon,
     component: AssociateMembers,
@@ -59,6 +65,7 @@ const commonRoute = [
   },
   {
     path: "/leadership",
+    hidden: false,
     name: "Liderança",
     icon: SupervisorAccountIcon,
     component: Leadership,
@@ -66,6 +73,7 @@ const commonRoute = [
   },
   {
     path: "/add-leaders",
+    hidden: true,
     name: "Associar Líderes",
     icon: GroupAddIcon,
     component: AssociateLeaders,
@@ -73,20 +81,39 @@ const commonRoute = [
   },
   {
     path: "/groups",
+    hidden: false,
     name: "Grupos",
     icon: Group,
     component: Groups,
     layout: "/admin"
   },
   {
-    path: "/add-group",
-    name: "Criar Grupo",
-    icon: PlaylistAddIcon,
-    component: CreateGroup,
+    path: "/functions",
+    hidden: false,
+    name: "Funções",
+    icon: BuildIcon,
+    component: Functions,
     layout: "/admin"
   },
+  //{
+  //  path: "/add-group",
+  //  hidden: true,
+  //  name: "Criar Grupo",
+  //  icon: PlaylistAddIcon,
+  //  component: CreateGroup,
+  //  layout: "/admin"
+  //},
+  //{
+  //  path: "/associate-members-group/:id",
+  //  hidden: true,
+  //  name: "Associar ao Grupo",
+  //  icon: GroupAddIcon,
+  //  component: AssociateMembersGroup,
+  //  layout: "/admin",
+  //},
   {
     path: "/activities",
+    hidden: false,
     name: "Cadastro de Atividade",
     icon: AssignmentIcon,
     component: Activities,

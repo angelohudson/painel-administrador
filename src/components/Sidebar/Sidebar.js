@@ -23,12 +23,12 @@ export default function Sidebar(props) {
   const classes = useStyles();
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
-    return window.location.href.indexOf(routeName) > -1 ? true : false;
+    return window.location.pathname == routeName ? true : false;
   }
   const { color, logo, image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
-      {routes.map((prop, key) => {
+      {routes.filter((prop, key) => {return prop.hidden===false}).map((prop, key) => {
         var activePro = " ";
         var listItemClasses;
         listItemClasses = classNames({
@@ -38,7 +38,7 @@ export default function Sidebar(props) {
           [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path)
         });
         return (
-          activeRoute("admin/ministries") ? null :
+          activeRoute("/admin/ministries") ? null :
             <NavLink
               to={prop.layout + prop.path}
               className={activePro + classes.item}
@@ -93,6 +93,7 @@ export default function Sidebar(props) {
         null}
     </div>
   );
+  
   return (
     <div>
       <Hidden mdUp implementation="css">
@@ -125,7 +126,7 @@ export default function Sidebar(props) {
         </Drawer>
       </Hidden>
       <Hidden smDown implementation="css">
-        {activeRoute("admin/ministries") ? null :
+        {activeRoute("/admin/ministries") ? null :
           <Drawer
             anchor={props.rtlActive ? "right" : "left"}
             variant="permanent"

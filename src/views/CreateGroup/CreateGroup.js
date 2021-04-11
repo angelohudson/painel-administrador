@@ -41,6 +41,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function CreateGroup(props) {
+  const { currentMinistrieId } = props
   const [groupName, setGroupName] = React.useState("");
   const [loading, setLoading] = React.useState({ ...props.loading });
   const classes = useStyles();
@@ -49,10 +50,9 @@ export default function CreateGroup(props) {
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
-      await HttpService.createGroup(user, props.currentMinistrieObject.id, groupName)
+      await HttpService.createGroup(user, currentMinistrieId, groupName)
         .then((response) => {
           setLoading(false);
-          props.history.push('/admin/groups');
         });
     } catch (e) {
       console.log(e.message);

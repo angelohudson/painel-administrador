@@ -51,8 +51,33 @@ class HttpService {
 		});
 	}
 
+	getMembersByGroup(user, groupId) {
+		const url = this._getUrl(`membro/by-grupo/${groupId}`);
+		return axios(url, {
+			method: 'GET',
+			auth: user
+		});
+	}
+
+
+	getMembersByFunction(user, functionId) {
+		const url = this._getUrl(`membro/by-funcao-titulo/${functionId}`);
+		return axios(url, {
+			method: 'GET',
+			auth: user
+		});
+	}
+
 	getMembersNotAssociate(user, ministrieId) {
 		const url = this._getUrl(`membro/by-ministerio/` + ministrieId);
+		return axios(url, {
+			method: 'GET',
+			auth: user
+		});
+	}
+
+	getMembersNotAssociateOnGroup(user, groupId) {
+		const url = this._getUrl(`membro/grupo-not-associate/` + groupId);
 		return axios(url, {
 			method: 'GET',
 			auth: user
@@ -69,6 +94,26 @@ class HttpService {
 		});
 	}
 
+	associateMembersOnGroup(user, members, groupId) {
+		const url = this._getUrl(`grupo/associa-membro`);
+		const form = { "membros": members, "grupoId": groupId };
+		return axios(url, {
+			method: 'POST',
+			auth: user,
+			data: form
+		});
+	}
+
+	removeMembersOnGroup(user, members, groupId) {
+		const url = this._getUrl(`grupo/remove-membro`);
+		const form = { "membros": members, "grupoId": groupId };
+		return axios(url, {
+			method: 'DELETE',
+			auth: user,
+			data: form
+		});
+	}
+	
 	createGroup(user, ministrieId, title) {
 		const url = this._getUrl(`grupo`);
 		const form = { "ministerioId": ministrieId, "titulo": title };

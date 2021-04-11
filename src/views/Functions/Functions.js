@@ -51,20 +51,19 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function Groups(props) {
-    const ref = React.useRef(null);
+export default function Functions(props) {
     const [loading, setLoading] = React.useState({ ...props.loading });
-    const [groupIdSelected, setGroupIdSelected] = React.useState(null);
-    const [newGroupSelected, setNewGroupSelected] = React.useState(false);
-    const [groups, setGroups] = React.useState([])
+    const [functionIdSelected, setFunctionIdSelected] = React.useState(null);
+    const [newfunctionSelected, setNewfunctionSelected] = React.useState(false);
+    const [functions, setFunctions] = React.useState([])
     const classes = useStyles();
 
-    async function getGroups() {
+    async function getFunctions() {
         try {
             const user = UserService.getLoggedUser()
-            await HttpService.getGroups(user, props.currentMinistrieObject.id)
+            await HttpService.getFunctions(user, props.currentMinistrieObject.id)
                 .then((response) => {
-                    setGroups(response.data);
+                    setFunctions(response.data);
                     setLoading(false);
                 });
         } catch (e) {
@@ -74,16 +73,15 @@ export default function Groups(props) {
     }
 
     React.useEffect(() => {
-        getGroups();
+        getFunctions();
     }, []);
 
-    function doCreateGroup() {
-        setNewGroupSelected(!newGroupSelected);
+    function doCreateFunctions() {
+        setNewfunctionSelected(!newfunctionSelected);
     }    
 
     function doAction(id) {
-        ref.current.setId(id);
-        setGroupIdSelected(id);
+        setFunctionIdSelected(id);
     }
 
     return (
@@ -101,15 +99,15 @@ export default function Groups(props) {
                             doAction={doAction}
                             tableHeaderColor="primary"
                             tableHead={["titulo"]}
-                            tableData={groups}
+                            tableData={functions}
                         />
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={doCreateGroup} color="primary"> {newGroupSelected ? "Ocultar Criação" : "Criar Grupo"} </Button>
+                        <Button onClick={doCreateFunctions} color="primary"> {newfunctionSelected ? "Ocultar Criação" : "Criar Grupo"} </Button>
                     </CardFooter>
                 </Card>
-                {newGroupSelected ? <CreateGroup currentMinistrieId={props.currentMinistrieObject.id} /> : null}
-                <AssociateMembersGroup ref={ref} id={groupIdSelected} />
+                {newfunctionSelected ? <CreateGroup currentMinistrieId={props.currentMinistrieObject.id} /> : null}
+                {functionIdSelected ? <AssociateMembersGroup id={functionIdSelected} /> : null}
             </GridItem>
         </GridContainer>
     );
