@@ -16,8 +16,8 @@ import { LinearProgress } from "@material-ui/core";
 import UserService from 'services/userService';
 import HttpService from 'services/httpService';
 import { NotificationManager } from 'react-notifications';
-import AssociateMembersGroup from "views/AssociateMembersGroup/AssociateMembersGroup";
-import CreateGroup from "views/CreateGroup/CreateGroup";
+import CreateFunctions from "views/CreateFunctions/CreateFunctions";
+import AssociateMembersFunction from "views/AssociateMembersFunction/AssociateMembersFunction";
 
 const styles = {
     cardCategoryWhite: {
@@ -52,13 +52,14 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function Functions(props) {
+    const ref = React.useRef(null);
     const [loading, setLoading] = React.useState({ ...props.loading });
-    const [functionIdSelected, setFunctionIdSelected] = React.useState(null);
-    const [newfunctionSelected, setNewfunctionSelected] = React.useState(false);
+    const [newFunctionSelected, setNewFunctionSelected] = React.useState(false);
     const [functions, setFunctions] = React.useState([])
     const classes = useStyles();
 
     async function getFunctions() {
+        setLoading(true);
         try {
             const user = UserService.getLoggedUser()
             await HttpService.getFunctions(user, props.currentMinistrieObject.id)
@@ -77,11 +78,11 @@ export default function Functions(props) {
     }, []);
 
     function doCreateFunctions() {
-        setNewfunctionSelected(!newfunctionSelected);
+        setNewFunctionSelected(!newFunctionSelected);
     }    
 
     function doAction(id) {
-        setFunctionIdSelected(id);
+        ref.current.setId(id);
     }
 
     return (
@@ -90,7 +91,7 @@ export default function Functions(props) {
             <GridItem xs={12} sm={12} md={12}>
                 <Card>
                     <CardHeader color="primary">
-                        <h4 className={classes.cardTitleWhite}>Lista de Grupos</h4>
+                        <h4 className={classes.cardTitleWhite}>Lista de Funções</h4>
                     </CardHeader>
                     <CardBody>
                         <Table
@@ -98,16 +99,16 @@ export default function Functions(props) {
                             tableAction={true}
                             doAction={doAction}
                             tableHeaderColor="primary"
-                            tableHead={["titulo"]}
+                            tableHead={["id", "titulo"]}
                             tableData={functions}
                         />
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={doCreateFunctions} color="primary"> {newfunctionSelected ? "Ocultar Criação" : "Criar Grupo"} </Button>
+                        <Button onClick={doCreateFunctions} color="primary"> {newFunctionSelected ? "Ocultar Criação" : "Criar Função"} </Button>
                     </CardFooter>
                 </Card>
-                {newfunctionSelected ? <CreateGroup currentMinistrieId={props.currentMinistrieObject.id} /> : null}
-                {functionIdSelected ? <AssociateMembersGroup id={functionIdSelected} /> : null}
+                {newFunctionSelected ? <CreateFunctions onCreate={getFunctions} currentMinistrieId={props.currentMinistrieObject.id} /> : null}
+                <AssociateMembersFunction ref={ref}/>
             </GridItem>
         </GridContainer>
     );

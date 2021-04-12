@@ -46,7 +46,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const AssociateMembersGroup = React.forwardRef((props, ref) => {
+const AssociateMembersFunction = React.forwardRef((props, ref) => {
   const [id, setId] = React.useState(props.id);
   const [loading, setLoading] = React.useState({ ...props.loading });
   const [membersNotAssociated, setMembersNotAssociated] = React.useState([]);
@@ -54,7 +54,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
   const [members, setMembers] = React.useState([]);
   const [tableCheckedIndex, setTableCheckedIndex] = React.useState([]);
   const classes = useStyles();
-  
+
   React.useImperativeHandle(ref, () => {
     return {
       setId: setNewId
@@ -70,13 +70,13 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
-      await HttpService.getMembersNotAssociateOnGroup(user, id)
+      await HttpService.getMembersNotAssociateOnFunction(user, id)
         .then((response) => {
           setMembersNotAssociated(response.data);
         });
-      await HttpService.getMembersByGroup(user, id)
+      await HttpService.getMembersByFunction(user, id)
         .then((response) => {
-          setMembers(response.data);
+          setMembers(response.data.map((f) => { return f.membro }));
         });
       setLoading(false);
     } catch (e) {
@@ -90,7 +90,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
     setLoading(true);
     try {
       const user = UserService.getLoggedUser();
-      await HttpService.associateMembersOnGroup(user, tableCheckedIndexNotAssociated, id)
+      await HttpService.associateMembersOnFunction(user, tableCheckedIndexNotAssociated, id)
         .then((response) => {
           console.log(response);
           getMembers(id);
@@ -106,7 +106,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
     setLoading(true);
     try {
       const user = UserService.getLoggedUser();
-      await HttpService.removeMembersOnGroup(user, tableCheckedIndex, id)
+      await HttpService.removeMembersOnFunction(user, tableCheckedIndex, id)
         .then((response) => {
           console.log(response);
           getMembers(id);
@@ -117,7 +117,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
       setLoading(false);
     }
   }
-  
+
   React.useEffect(() => {
     setLoading(false);
   }, []);
@@ -129,8 +129,8 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
         <GridItem spacing={6} sm={6} md={6}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Lista de membros assocciados ao grupo</h4>
-              <p className={classes.cardCategoryWhite}>Selecione os membros para remover do grupo</p>
+              <h4 className={classes.cardTitleWhite}>Lista de membros assocciados a função</h4>
+              <p className={classes.cardCategoryWhite}>Selecione os membros para remover da função</p>
             </CardHeader>
             <CardBody>
               <Table
@@ -150,8 +150,8 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
         <GridItem spacing={6} sm={6} md={6}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Lista de membros não associados ao grupo</h4>
-              <p className={classes.cardCategoryWhite}>Selecione os membros para associar ao grupo</p>
+              <h4 className={classes.cardTitleWhite}>Lista de membros não associados a função</h4>
+              <p className={classes.cardCategoryWhite}>Selecione os membros para associar a função</p>
             </CardHeader>
             <CardBody>
               <Table
@@ -172,4 +172,4 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
   );
 })
 
-export default AssociateMembersGroup;
+export default AssociateMembersFunction;

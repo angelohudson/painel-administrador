@@ -54,12 +54,12 @@ const useStyles = makeStyles(styles);
 export default function Groups(props) {
     const ref = React.useRef(null);
     const [loading, setLoading] = React.useState({ ...props.loading });
-    const [groupIdSelected, setGroupIdSelected] = React.useState(null);
     const [newGroupSelected, setNewGroupSelected] = React.useState(false);
     const [groups, setGroups] = React.useState([])
     const classes = useStyles();
 
     async function getGroups() {
+        setLoading(true);
         try {
             const user = UserService.getLoggedUser()
             await HttpService.getGroups(user, props.currentMinistrieObject.id)
@@ -83,7 +83,6 @@ export default function Groups(props) {
 
     function doAction(id) {
         ref.current.setId(id);
-        setGroupIdSelected(id);
     }
 
     return (
@@ -100,7 +99,7 @@ export default function Groups(props) {
                             tableAction={true}
                             doAction={doAction}
                             tableHeaderColor="primary"
-                            tableHead={["titulo"]}
+                            tableHead={["id", "titulo"]}
                             tableData={groups}
                         />
                     </CardBody>
@@ -108,8 +107,8 @@ export default function Groups(props) {
                         <Button onClick={doCreateGroup} color="primary"> {newGroupSelected ? "Ocultar Criação" : "Criar Grupo"} </Button>
                     </CardFooter>
                 </Card>
-                {newGroupSelected ? <CreateGroup currentMinistrieId={props.currentMinistrieObject.id} /> : null}
-                <AssociateMembersGroup ref={ref} id={groupIdSelected} />
+                {newGroupSelected ? <CreateGroup currentMinistrieId={props.currentMinistrieObject.id} onCreate={getGroups} /> : null}
+                <AssociateMembersGroup ref={ref}/>
             </GridItem>
         </GridContainer>
     );

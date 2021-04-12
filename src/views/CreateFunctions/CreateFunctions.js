@@ -9,16 +9,15 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-// import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import { LinearProgress } from "@material-ui/core";
 
 import { nameMask } from 'utils/mask';
 
 import UserService from 'services/userService';
 import HttpService from 'services/httpService';
 import { NotificationManager } from 'react-notifications';
-import { LinearProgress } from "@material-ui/core";
 
 const styles = {
   cardCategoryWhite: {
@@ -41,17 +40,17 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function CreateGroup(props) {
+export default function CreateFunction(props) {
   const { currentMinistrieId, onCreate } = props
-  const [groupName, setGroupName] = React.useState("");
+  const [functionName, setFunctionName] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const classes = useStyles();
 
-  async function doCreateGroup() {
+  async function doCreateFunction() {
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
-      await HttpService.createGroup(user, currentMinistrieId, groupName)
+      await HttpService.createFunction(user, currentMinistrieId, functionName)
         .then((response) => {
           setLoading(false);
           onCreate();
@@ -65,37 +64,37 @@ export default function CreateGroup(props) {
 
   return (
     loading ? <LinearProgress /> :
-      <div>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={12}>
-            <Card>
-              <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Criar Grupo</h4>
-              </CardHeader>
-              <CardBody>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={12}>
-                    <CustomInput
-                      labelText="Título do Grupo"
-                      id="group"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "text",
-                        onChange: (event => setGroupName(nameMask(event.target.value))),
-                        value: groupName
-                      }}
-                    />
-                  </GridItem>
-                </GridContainer>
-              </CardBody>
-              <CardFooter>
-                <Button onClick={doCreateGroup} disabled={!groupName.length} color="primary">Cadastrar Grupo</Button>
-              </CardFooter>
-            </Card>
-          </GridItem>
-        </GridContainer>
-      </div>
+    <div>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>Criar Função</h4>
+            </CardHeader>
+            <CardBody>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  <CustomInput
+                    labelText="Título do Função"
+                    id="function"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      type: "text",
+                      onChange: (event => setFunctionName(nameMask(event.target.value))),
+                      value: functionName
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+            </CardBody>
+            <CardFooter>
+              <Button onClick={doCreateFunction} disabled={!functionName.length} color="primary">Cadastrar Função</Button>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    </div>
   );
 }

@@ -43,6 +43,14 @@ class HttpService {
 		});
 	}
 
+	getFunctions(user, ministrieId) {
+		const url = this._getUrl(`funcao/titulo/${ministrieId}`);
+		return axios(url, {
+			method: 'GET',
+			auth: user
+		});
+	}
+
 	getMembers(user, ministrieId) {
 		const url = this._getUrl(`membro/by-ministerio/${ministrieId}`);
 		return axios(url, {
@@ -61,7 +69,7 @@ class HttpService {
 
 
 	getMembersByFunction(user, functionId) {
-		const url = this._getUrl(`membro/by-funcao-titulo/${functionId}`);
+		const url = this._getUrl(`funcao/${functionId}`);
 		return axios(url, {
 			method: 'GET',
 			auth: user
@@ -78,6 +86,14 @@ class HttpService {
 
 	getMembersNotAssociateOnGroup(user, groupId) {
 		const url = this._getUrl(`membro/grupo-not-associate/` + groupId);
+		return axios(url, {
+			method: 'GET',
+			auth: user
+		});
+	}
+
+	getMembersNotAssociateOnFunction(user, funcaoTipoId) {
+		const url = this._getUrl(`membro/not-associate/` + funcaoTipoId);
 		return axios(url, {
 			method: 'GET',
 			auth: user
@@ -104,6 +120,16 @@ class HttpService {
 		});
 	}
 
+	associateMembersOnFunction(user, members, groupId) {
+		const url = this._getUrl(`funcao/associa-membro`);
+		const form = { "membros": members, "funcaoTituloId": groupId };
+		return axios(url, {
+			method: 'POST',
+			auth: user,
+			data: form
+		});
+	}
+
 	removeMembersOnGroup(user, members, groupId) {
 		const url = this._getUrl(`grupo/remove-membro`);
 		const form = { "membros": members, "grupoId": groupId };
@@ -113,9 +139,29 @@ class HttpService {
 			data: form
 		});
 	}
+
+	removeMembersOnFunction(user, members, funcaoId) {
+		const url = this._getUrl(`funcao/remove-membro`);
+		const form = { "membros": members, "funcaoTituloId": funcaoId };
+		return axios(url, {
+			method: 'DELETE',
+			auth: user,
+			data: form
+		});
+	}
 	
 	createGroup(user, ministrieId, title) {
 		const url = this._getUrl(`grupo`);
+		const form = { "ministerioId": ministrieId, "titulo": title };
+		return axios(url, {
+			method: 'POST',
+			auth: user,
+			data: form
+		});
+	}
+
+	createFunction(user, ministrieId, title) {
+		const url = this._getUrl(`funcao`);
 		const form = { "ministerioId": ministrieId, "titulo": title };
 		return axios(url, {
 			method: 'POST',
