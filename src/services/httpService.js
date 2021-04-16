@@ -210,6 +210,24 @@ class HttpService {
 		});
 	}
 
+	addActivitiesByGroup(user, grupoId, activity) {
+		const url = this._getUrl(`task/by-grupo/` + grupoId);
+		return axios(url, {
+			method: 'POST',
+			auth: user,
+			data: activity
+		});
+	}
+
+	addActivities(user, ministrieId, activity) {
+		const url = this._getUrl(`task/by-ministerio/` + ministrieId);
+		return axios(url, {
+			method: 'POST',
+			auth: user,
+			data: activity
+		});
+	}
+
 	_getUrl(url) {
 		return `${Paths.API_ADTIMBO_PROD}/${url}`;
 	}

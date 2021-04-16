@@ -25,17 +25,14 @@ import Group from '@material-ui/icons/Group';
 
 import MemberList from "views/MemberList/MemberList.js";
 import AssociateMembers from "views/AssociateMembers/AssociateMembers.js";
-import AssociateMembersGroup from "views/AssociateMembersGroup/AssociateMembersGroup.js"
 import Activities from "views/Activities/Activities.js";
 import Leadership from "views/Leadership/Leadership.js";
 import AssociateLeaders from "views/AssociateLeaders/AssociateLeaders.js";
 
 import Groups from "views/Groups/Groups.js";
 import Functions from "views/Functions/Functions.js";
-import CreateGroup from "views/CreateGroup/CreateGroup.js";
 import Ministries from "views/Ministries/Ministries.js";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import BuildIcon from '@material-ui/icons/Build';
 
 const commonRoute = [
@@ -95,22 +92,6 @@ const commonRoute = [
     component: Functions,
     layout: "/admin"
   },
-  //{
-  //  path: "/add-group",
-  //  hidden: true,
-  //  name: "Criar Grupo",
-  //  icon: PlaylistAddIcon,
-  //  component: CreateGroup,
-  //  layout: "/admin"
-  //},
-  //{
-  //  path: "/associate-members-group/:id",
-  //  hidden: true,
-  //  name: "Associar ao Grupo",
-  //  icon: GroupAddIcon,
-  //  component: AssociateMembersGroup,
-  //  layout: "/admin",
-  //},
   {
     path: "/activities",
     hidden: false,
