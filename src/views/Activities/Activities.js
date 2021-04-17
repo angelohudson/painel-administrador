@@ -47,16 +47,20 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function Activities(props) {
-  const schedules = [];
   const [loading, setLoading] = React.useState({ ...props.loading });
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [groups, setGroups] = React.useState([]);
   const [groupId, setGroupId] = React.useState("");
   const [apportionmentType, setApportionmentType] = React.useState("group");
   const classes = useStyles();
+  let meberFunctions = new Map();
 
-  function handleChange(event, value){
+  function handleChange(event, value) {
     setApportionmentType(value);
+  }
+
+  function addMeberFunctions(index, meberFunctionsId) {
+    meberFunctions.set(index, meberFunctionsId);
   }
 
   async function getGroups() {
@@ -79,20 +83,32 @@ export default function Activities(props) {
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
-      if(apportionmentType == 'group') {
+      if (apportionmentType == 'group') {
         if (groupId) {
           await HttpService.addActivitiesByGroup(user, groupId, getActitvity()).then((response) => setLoading(false));
         } else {
           await HttpService.addActivities(user, props.currentMinistrieObject.id, getActitvity()).then((response) => setLoading(false));
         }
       } else if (apportionmentType == 'schedule') {
-        await HttpService.addSchedule(user, props.currentMinistrieObject.id, schedules).then((response) => setLoading(false));
+        await HttpService.addSchedule(user, props.currentMinistrieObject.id, getSchedule()).then((response) => setLoading(false));
       }
     } catch (e) {
       console.log(e.message);
       NotificationManager.warning(e.message);
       setLoading(false);
     }
+  }
+
+  function getSchedule() {
+    return {
+      funcao: Array.from(meberFunctions.values()).map((v) => { return { funcaoId: v } }),
+      task: {
+        data: selectedDate.toISOString().slice(0, 19),
+        descricao: document.getElementById("description").value,
+        subtitulo: document.getElementById("sub-title").value,
+        titulo: document.getElementById("title").value
+      },
+    };
   }
 
   function getActitvity() {
@@ -118,7 +134,7 @@ export default function Activities(props) {
 
   return (
     <div>
-      {loading ? <LinearProgress/> :
+      {loading ? <LinearProgress /> : null}
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -195,24 +211,24 @@ export default function Activities(props) {
               <GridContainer>
                 <GridItem xs={12} sm={12} md={3}>
                   <ToggleButtonGroup value={apportionmentType} exclusive onChange={handleChange}>
-                    <ToggleButton value="group" aria-label="list"> <Group/> </ToggleButton>
-                    <ToggleButton value="schedule" aria-label="module"> <ScheduleIcon/> </ToggleButton>
+                    <ToggleButton value="group" aria-label="list"> <Group /> </ToggleButton>
+                    <ToggleButton value="schedule" aria-label="module"> <ScheduleIcon /> </ToggleButton>
                   </ToggleButtonGroup>
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={3}>
-                  { apportionmentType == 'group' ?
-                      <CustomSelect 
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        itens = {groups.map((g) => { return {id: g.id, value: g.titulo}; })}
-                        name = "Grupos"
-                        id = "groups"
-                        onChange = {setGroupId}
-                      /> :
-                      <Schedule onAddSchedule={onAddSchedule} currentMinistrieObject={props.currentMinistrieObject} />
+                <GridItem xs={12} sm={12} md={12}>
+                  {apportionmentType == 'group' ?
+                    <CustomSelect
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      itens={groups.map((g) => { return { id: g.id, value: g.titulo }; })}
+                      name="Grupos"
+                      id="groups"
+                      onChange={setGroupId}
+                    /> :
+                    <Schedule addMeberFunctions={addMeberFunctions} onAddSchedule={onAddSchedule} currentMinistrieObject={props.currentMinistrieObject} />
                   }
                 </GridItem>
               </GridContainer>
@@ -222,7 +238,7 @@ export default function Activities(props) {
             </CardFooter>
           </Card>
         </GridItem>
-      </GridContainer>}
+      </GridContainer>
     </div>
   );
 }

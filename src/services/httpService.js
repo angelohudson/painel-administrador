@@ -149,7 +149,7 @@ class HttpService {
 			data: form
 		});
 	}
-	
+
 	createGroup(user, ministrieId, title) {
 		const url = this._getUrl(`grupo`);
 		const form = { "ministerioId": ministrieId, "titulo": title };
@@ -185,7 +185,7 @@ class HttpService {
 			auth: user
 		});
 	}
-	
+
 	associateLeadership(user, leaders, ministrieId) {
 		const url = this._getUrl(`lideranca`);
 		const form = { "ministerioId": ministrieId, "membros": leaders };
@@ -225,6 +225,17 @@ class HttpService {
 			method: 'POST',
 			auth: user,
 			data: activity
+		});
+	}
+
+	addSchedule(user, ministrieId, schedules) {
+		const url = this._getUrl(`task/by-escala/` + ministrieId);
+		console.log(schedules);
+		console.log(url);
+		return axios(url, {
+			method: 'POST',
+			auth: user,
+			data: schedules
 		});
 	}
 
