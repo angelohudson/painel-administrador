@@ -82,6 +82,7 @@ export default function Admin({ ...rest }) {
             setCurrentMinistrieObject(ministries.find(x => x.titulo == ministrie));
         }
         if (ministrie === "Secretaria") {
+            console.log(commonRoute.concat(secretaryRoute));
             setRoutes(commonRoute.concat(secretaryRoute));
             rest.history.push('/admin/ministrie')
         }

@@ -13,7 +13,6 @@ import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import { NotificationManager } from "react-notifications";
 import CustomSelect from "components/CustomInput/CustomSelect";
-import CustomInput from "components/CustomInput/CustomInput";
 import FunctionSelect from "components/CustomInput/FunctionSelect";
 import Button from "components/CustomButtons/Button.js";
 // services
@@ -77,13 +76,13 @@ export default function Schedule(props) {
     setSchedules(schedules.slice(0, -1));
   }
 
-  function getGroupSelector(index, id) {
+  function getGroupSelector(index, id, title) {
     if (apportionmentType == 'function') {
-      return <FunctionSelect type={apportionmentType} id={index} addMeberFunctions={addMeberFunctions} functionId={id} />
+      return <FunctionSelect addMeberFunctions={addMeberFunctions} functionTitle={title} type={apportionmentType} id={index} functionId={id} />
     } else if (apportionmentType == 'group') {
-      return <FunctionSelect type={apportionmentType} id={index} addMeberFunctions={addMeberFunctions} groupId={id} />
+      return <FunctionSelect addMeberFunctions={addMeberFunctions} functionTitle={title} type={apportionmentType} id={index} groupId={id} />
     } else if (apportionmentType == 'minister') {
-      return <FunctionSelect type={apportionmentType} id={index} addMeberFunctions={addMeberFunctions} ministerId={id} />
+      return <FunctionSelect addMeberFunctions={addMeberFunctions} functionTitle={title} type={apportionmentType} id={index} ministerId={id} />
     }
   }
 
@@ -147,30 +146,9 @@ export default function Schedule(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {
-                  schedules.map((s, index) => {
-                    return <TableRow>
-                      {apportionmentType == 'function' ?
-                        <TableCell>
-                          {s.titulo}
-                        </TableCell>
-                        :
-                        <TableCell>
-                          <CustomInput
-                            labelText="Esse membro será escalado como: "
-                            id="function-name"
-                            formControlProps={{
-                              fullWidth: true
-                            }}
-                          />
-                        </TableCell>
-                      }
-                      <TableCell width="70%" fullWidth="70%">
-                        {getGroupSelector(index, s.id)}
-                      </TableCell>
-                    </TableRow>
-                  })
-                }
+                {schedules.map((s, index) => {
+                  return getGroupSelector(index, s.id, s.titulo)
+                })}
               </TableBody>
             </Table>
             {schedules.length == 0 ? null :

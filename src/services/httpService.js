@@ -77,7 +77,7 @@ class HttpService {
 	}
 
 	getMembersNotAssociate(user, ministrieId) {
-		const url = this._getUrl(`membro/by-ministerio/` + ministrieId);
+		const url = this._getUrl(`membro/ministerio-not-associate/` + ministrieId);
 		return axios(url, {
 			method: 'GET',
 			auth: user

@@ -21,6 +21,7 @@ import UserService from 'services/userService';
 import HttpService from 'services/httpService';
 import { NotificationManager } from "react-notifications";
 import Schedule from "views/Schedule/Schedule";
+import { validate } from "email-validator";
 
 // import avatar from "assets/img/faces/gerson.jpg";
 
@@ -55,11 +56,12 @@ export default function Activities(props) {
   let meberFunctions = new Map();
 
   function handleChange(event, value) {
-    setApportionmentType(value);
+    if (value)
+      setApportionmentType(value);
   }
 
-  function addMeberFunctions(index, memberId, functionName) {
-    meberFunctions.set(index, { name: functionName, memberId: memberId });
+  function addMeberFunctions(index, memberId) {
+    meberFunctions.set(index, memberId);
   }
 
   function clearMeberFunctions(index, meberFunctionsId) {
@@ -83,12 +85,14 @@ export default function Activities(props) {
   }
 
   async function doRegister() {
+    if (!validate())
+      return;
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
       if (apportionmentType == 'group') {
         if (groupId) {
-          await HttpService.addActivitiesByGroup(user, groupId, getActitvity()).then((response) => setLoading(false));
+          await HttpService.addActivitiesByGroup(user, groupId, getActitvity()).then((response) => { setLoading(false); setGroupId(""); });
         } else {
           await HttpService.addActivities(user, props.currentMinistrieObject.id, getActitvity()).then((response) => setLoading(false));
         }
@@ -102,9 +106,41 @@ export default function Activities(props) {
     }
   }
 
+  function validate() {
+    if (!document.getElementById("description").value) {
+      NotificationManager.warning("Campo descrição não preenchido");
+      return false;
+    }
+    if (!document.getElementById("sub-title").value) {
+      NotificationManager.warning("Campo sub-título não preenchido");
+      return false;
+    }
+    if (!document.getElementById("title").value) {
+      NotificationManager.warning("Campo título não preenchido");
+      return false;
+    }
+    if (!selectedDate.toISOString()) {
+      NotificationManager.warning("Campo data não preenchido");
+      return false;
+    }
+    return true;
+  }
+
   function getSchedule() {
+    console.log(meberFunctions);
     return {
-      funcao: Array.from(meberFunctions.values()).map((v) => { return { funcaoId: v } }),
+      funcao: Array.from(meberFunctions.keys()).map((index) => {
+        let funcaoTitle = document.getElementById(index + "function-name");
+        let memberId = meberFunctions.get(index);
+        if (memberId && funcaoTitle) {
+          return {
+            funcaoTitulo: funcaoTitle.value,
+            membroId: memberId,
+          }
+        } else {
+          return false;
+        }
+      }).filter(v => v),
       task: {
         data: selectedDate.toISOString().slice(0, 19),
         descricao: document.getElementById("description").value,
@@ -133,111 +169,96 @@ export default function Activities(props) {
 
   return (
     <div>
-      {loading ? <LinearProgress /> : null}
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Cadastrar Atividade</h4>
-              <p className={classes.cardCategoryWhite}>Preencha as informações da atividade</p>
-            </CardHeader>
-            <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  <CustomInput
-                    labelText="Título da Atividade"
-                    id="title"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  <CustomInput
-                    labelText="Local da Atividade"
-                    id="sub-title"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    id="birthday"
-                    type="date"
-                    selectedDate={selectedDate}
-                    labelDate="Data de inicio da atividade"
-                    handleDateChange={handleDateChange}
-                    format="dd/MM/yyyy HH:mm"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    id="birthday"
-                    type="date"
-                    selectedDate={selectedDate}
-                    labelDate="Data de término da atividade"
-                    handleDateChange={handleDateChange}
-                    format="dd/MM/yyyy HH:mm"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  <CustomInput
-                    labelText="Descrição da atividade"
-                    id="description"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 5
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={3}>
-                  <ToggleButtonGroup value={apportionmentType} exclusive onChange={handleChange}>
-                    <ToggleButton value="group" aria-label="list"> <Group /> </ToggleButton>
-                    <ToggleButton value="schedule" aria-label="module"> <ScheduleIcon /> </ToggleButton>
-                  </ToggleButtonGroup>
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  {apportionmentType == 'group' ?
-                    <CustomSelect
+      {loading ? <LinearProgress /> :
+        < GridContainer >
+          <GridItem xs={12} sm={12} md={12}>
+            <Card>
+              <CardHeader color="primary">
+                <h4 className={classes.cardTitleWhite}>Cadastrar Atividade</h4>
+                <p className={classes.cardCategoryWhite}>Preencha as informações da atividade</p>
+              </CardHeader>
+              <CardBody>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <CustomInput
+                      labelText="Título da Atividade"
+                      id="title"
                       formControlProps={{
                         fullWidth: true
                       }}
-                      itens={groups.map((g) => { return { id: g.id, value: g.titulo }; })}
-                      name="Grupos"
-                      id="groups"
-                      onChange={setGroupId}
-                    /> :
-                    <Schedule clearMeberFunctions={clearMeberFunctions} addMeberFunctions={addMeberFunctions} currentMinistrieObject={props.currentMinistrieObject} />
-                  }
-                </GridItem>
-              </GridContainer>
-            </CardBody>
-            <CardFooter>
-              <Button color="primary" onClick={doRegister}>Cadastrar</Button>
-            </CardFooter>
-          </Card>
-        </GridItem>
-      </GridContainer>
-    </div>
+                    />
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      id="birthday"
+                      type="date"
+                      selectedDate={selectedDate}
+                      labelDate="Data de inicio da atividade"
+                      handleDateChange={handleDateChange}
+                      format="dd/MM/yyyy HH:mm"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Sub título"
+                      id="sub-title"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                    />
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <CustomInput
+                      labelText="Descrição da atividade"
+                      id="description"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        multiline: true,
+                        rows: 5
+                      }}
+                    />
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={3}>
+                    <ToggleButtonGroup value={apportionmentType} exclusive onChange={handleChange}>
+                      <ToggleButton value="group" aria-label="list"> <Group /> </ToggleButton>
+                      <ToggleButton value="schedule" aria-label="module"> <ScheduleIcon /> </ToggleButton>
+                    </ToggleButtonGroup>
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={12}>
+                    {apportionmentType == 'group' ?
+                      <CustomSelect
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        itens={groups.map((g) => { return { id: g.id, value: g.titulo }; })}
+                        name="Grupos"
+                        id="groups"
+                        onChange={setGroupId}
+                      /> :
+                      <Schedule clearMeberFunctions={clearMeberFunctions} addMeberFunctions={addMeberFunctions} currentMinistrieObject={props.currentMinistrieObject} />
+                    }
+                  </GridItem>
+                </GridContainer>
+              </CardBody>
+              <CardFooter>
+                <Button color="primary" onClick={doRegister}>Cadastrar</Button>
+              </CardFooter>
+            </Card>
+          </GridItem>
+        </GridContainer>}
+    </div >
   );
 }

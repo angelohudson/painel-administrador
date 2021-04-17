@@ -1,15 +1,16 @@
 
-import { NotificationManager } from "react-notifications";
 import React from "react";
+import { NotificationManager } from "react-notifications";
+import { LinearProgress, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 // services
 import UserService from 'services/userService';
 import HttpService from 'services/httpService';
-import { LinearProgress } from "@material-ui/core";
 // components
 import CustomSelect from "./CustomSelect";
+import CustomInput from "./CustomInput";
 
 export default function FunctionSelect(props) {
-    const { groupId, ministerId, functionId, type, addMeberFunctions, id } = props;
+    const { groupId, ministerId, functionId, type, id, functionTitle, addMeberFunctions } = props;
     const [loading, setLoading] = React.useState({ ...props.loading });
     const [members, setMembers] = React.useState([]);
 
@@ -76,17 +77,27 @@ export default function FunctionSelect(props) {
         getMebers();
     }, []);
 
-    return <div>
-        {loading ? <LinearProgress /> :
-            <CustomSelect
-                formControlProps={{
-                    fullWidth: true
-                }}
-                itens={members.map((f) => { return { id: f.id, value: f.nome }; })}
-                name="Membros"
-                id="id"
-                onChange={function (value) { addMeberFunctions(id, value) }}
+    return <TableRow>
+        <TableCell>
+            <CustomInput
+                labelText="Esse membro será escalado como: "
+                id={id + "function-name"}
+                inputProps={{ defaultValue: functionTitle }}
+                formControlProps={{ fullWidth: true }}
             />
+        </TableCell>
+        {loading ? <LinearProgress /> :
+            <TableCell>
+                <CustomSelect
+                    formControlProps={{
+                        fullWidth: true
+                    }}
+                    itens={members.map((f) => { return { id: f.id, value: f.nome }; })}
+                    name="Membros"
+                    id={id + "member-id"}
+                    onChange={function (value) { addMeberFunctions(id, value); }}
+                />
+            </TableCell>
         }
-    </div>
+    </TableRow>
 }
