@@ -15,7 +15,6 @@ import CustomSelect from "components/CustomInput/CustomSelect.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-// import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import UserService from 'services/userService';
@@ -59,8 +58,12 @@ export default function Activities(props) {
     setApportionmentType(value);
   }
 
-  function addMeberFunctions(index, meberFunctionsId) {
-    meberFunctions.set(index, meberFunctionsId);
+  function addMeberFunctions(index, memberId, functionName) {
+    meberFunctions.set(index, { name: functionName, memberId: memberId });
+  }
+
+  function clearMeberFunctions(index, meberFunctionsId) {
+    meberFunctions = new Map();
   }
 
   async function getGroups() {
@@ -118,10 +121,6 @@ export default function Activities(props) {
       subtitulo: document.getElementById("sub-title").value,
       titulo: document.getElementById("title").value
     };
-  }
-
-  function onAddSchedule(schedule) {
-    console.log(schedule);
   }
 
   React.useEffect(() => {
@@ -228,7 +227,7 @@ export default function Activities(props) {
                       id="groups"
                       onChange={setGroupId}
                     /> :
-                    <Schedule addMeberFunctions={addMeberFunctions} onAddSchedule={onAddSchedule} currentMinistrieObject={props.currentMinistrieObject} />
+                    <Schedule clearMeberFunctions={clearMeberFunctions} addMeberFunctions={addMeberFunctions} currentMinistrieObject={props.currentMinistrieObject} />
                   }
                 </GridItem>
               </GridContainer>
