@@ -177,14 +177,11 @@ export default function UserProfile(props) {
   const [place, setPlace] = React.useState("");
   const [number, setNumber] = React.useState();
   const [uf, setUf] = React.useState("CE");
-  const [birth, setBirth] = React.useState(`${selectedDate.getFullYear()}-${String(selectedDate.getMonth()).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`);
-  const [takePicture, setTakePicture] = React.useState(false);
   const [imageSrc, setImageSrc] = React.useState(avatar);
   const [photo, setPhoto] = React.useState();
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    setBirth(`${selectedDate.getFullYear()}-${String(selectedDate.getMonth()).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`);
   };
 
   async function handleCep(event) {
@@ -219,14 +216,6 @@ export default function UserProfile(props) {
     }
   }
 
-  function handleTakePhoto(dataUri) {
-    setImageSrc(dataUri);
-    setTakePicture(false);
-  }
-
-  function handleTakePicture() {
-    setTakePicture(true);
-  }
   function onDrop(picture) {
     console.log(picture[0]);
     setPhoto(picture[0]);
@@ -235,6 +224,7 @@ export default function UserProfile(props) {
 
   async function handleSubmit() {
     const user = UserService.getLoggedUser();
+    let birth = selectedDate.toISOString().slice(0, 10);
     if (cpf.length === 14 && name !== "" && phone !== "" && birth !== "" && cep.length === 9 && uf !== "" && city !== "" && district !== null && place !== "" && number !== "") {
       if (email !== "" && !EmailValidator.validate(email)) {
         NotificationManager.error(`Email inválido!`);
@@ -263,8 +253,7 @@ export default function UserProfile(props) {
       } catch (e) {
         console.log(e.message);
       }
-    }
-    else {
+    } else {
       NotificationManager.error(`Campos inválidos!`);
     }
   }

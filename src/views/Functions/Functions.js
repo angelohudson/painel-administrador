@@ -79,7 +79,7 @@ export default function Functions(props) {
 
     function doCreateFunctions() {
         setNewFunctionSelected(!newFunctionSelected);
-    }    
+    }
 
     function doAction(id) {
         ref.current.setId(id);
@@ -87,29 +87,29 @@ export default function Functions(props) {
 
     return (
         loading ? <LinearProgress /> :
-        <GridContainer>
-            <GridItem xs={12} sm={12} md={12}>
-                <Card>
-                    <CardHeader color="primary">
-                        <h4 className={classes.cardTitleWhite}>Lista de Funções</h4>
-                    </CardHeader>
-                    <CardBody>
-                        <Table
-                            idColumn={"id"}
-                            tableAction={true}
-                            doAction={doAction}
-                            tableHeaderColor="primary"
-                            tableHead={["id", "titulo"]}
-                            tableData={functions}
-                        />
-                    </CardBody>
-                    <CardFooter>
-                        <Button onClick={doCreateFunctions} color="primary"> {newFunctionSelected ? "Ocultar Criação" : "Criar Função"} </Button>
-                    </CardFooter>
-                </Card>
-                {newFunctionSelected ? <CreateFunctions onCreate={getFunctions} currentMinistrieId={props.currentMinistrieObject.id} /> : null}
-                <AssociateMembersFunction ref={ref}/>
-            </GridItem>
-        </GridContainer>
+            <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                    <Card>
+                        <CardHeader color="primary">
+                            <h4 className={classes.cardTitleWhite}>Lista de Funções</h4>
+                        </CardHeader>
+                        <CardBody>
+                            <Table
+                                idColumn={"id"}
+                                tableAction={true}
+                                doAction={doAction}
+                                tableHeaderColor="primary"
+                                tableHead={["id", "titulo"]}
+                                tableData={functions}
+                            />
+                        </CardBody>
+                        <CardFooter>
+                            <Button onClick={doCreateFunctions} color="primary"> {newFunctionSelected ? "Ocultar Criação" : "Criar Função"} </Button>
+                        </CardFooter>
+                    </Card>
+                    {newFunctionSelected ? <CreateFunctions onCreate={getFunctions} currentMinistrieId={props.currentMinistrieObject.id} /> : null}
+                    <AssociateMembersFunction ministerId={props.currentMinistrieObject.id} ref={ref} />
+                </GridItem>
+            </GridContainer>
     );
 }

@@ -84,16 +84,16 @@ class HttpService {
 		});
 	}
 
-	getMembersNotAssociateOnGroup(user, groupId) {
-		const url = this._getUrl(`membro/grupo-not-associate/` + groupId);
+	getMembersNotAssociateOnGroup(user, ministerId, groupId) {
+		const url = this._getUrl(`membro/grupo-not-associate/` + ministerId + '/' + groupId);
 		return axios(url, {
 			method: 'GET',
 			auth: user
 		});
 	}
 
-	getMembersNotAssociateOnFunction(user, funcaoTipoId) {
-		const url = this._getUrl(`membro/not-associate/` + funcaoTipoId);
+	getMembersNotAssociateOnFunction(user, ministerId, funcaoTipoId) {
+		const url = this._getUrl(`membro/not-associate/` + ministerId + '/' + funcaoTipoId);
 		return axios(url, {
 			method: 'GET',
 			auth: user
@@ -236,6 +236,14 @@ class HttpService {
 			method: 'POST',
 			auth: user,
 			data: schedules
+		});
+	}
+
+	getActivitiesByPeriod(user, ministrieId, startDate, endDate) {
+		const url = this._getUrl(`task/by-periodo/` + ministrieId + '?dataInicio=' + startDate + '&dataFim=' + endDate);
+		return axios(url, {
+			method: 'GET',
+			auth: user
 		});
 	}
 

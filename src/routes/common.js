@@ -20,6 +20,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AppsIcon from '@material-ui/icons/Apps';
 import Group from '@material-ui/icons/Group';
+import EventIcon from '@material-ui/icons/Event';
 
 // core components/views for Admin layout
 
@@ -34,6 +35,7 @@ import Functions from "views/Functions/Functions.js";
 import Ministries from "views/Ministries/Ministries.js";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import BuildIcon from '@material-ui/icons/Build';
+import Calendar from 'views/Calendar/Calendar';
 
 const commonRoute = [
   {
@@ -98,6 +100,14 @@ const commonRoute = [
     name: "Cadastro de Atividade",
     icon: AssignmentIcon,
     component: Activities,
+    layout: "/admin"
+  },
+  {
+    path: "/calendar",
+    hidden: false,
+    name: "Calendário",
+    icon: EventIcon,
+    component: Calendar,
     layout: "/admin"
   },
 ];

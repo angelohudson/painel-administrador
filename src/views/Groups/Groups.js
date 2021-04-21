@@ -79,7 +79,7 @@ export default function Groups(props) {
 
     function doCreateGroup() {
         setNewGroupSelected(!newGroupSelected);
-    }    
+    }
 
     function doAction(id) {
         ref.current.setId(id);
@@ -87,29 +87,29 @@ export default function Groups(props) {
 
     return (
         loading ? <LinearProgress /> :
-        <GridContainer>
-            <GridItem xs={12} sm={12} md={12}>
-                <Card>
-                    <CardHeader color="primary">
-                        <h4 className={classes.cardTitleWhite}>Lista de Grupos</h4>
-                    </CardHeader>
-                    <CardBody>
-                        <Table
-                            idColumn={"id"}
-                            tableAction={true}
-                            doAction={doAction}
-                            tableHeaderColor="primary"
-                            tableHead={["id", "titulo"]}
-                            tableData={groups}
-                        />
-                    </CardBody>
-                    <CardFooter>
-                        <Button onClick={doCreateGroup} color="primary"> {newGroupSelected ? "Ocultar Criação" : "Criar Grupo"} </Button>
-                    </CardFooter>
-                </Card>
-                {newGroupSelected ? <CreateGroup currentMinistrieId={props.currentMinistrieObject.id} onCreate={getGroups} /> : null}
-                <AssociateMembersGroup ref={ref}/>
-            </GridItem>
-        </GridContainer>
+            <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                    <Card>
+                        <CardHeader color="primary">
+                            <h4 className={classes.cardTitleWhite}>Lista de Grupos</h4>
+                        </CardHeader>
+                        <CardBody>
+                            <Table
+                                idColumn={"id"}
+                                tableAction={true}
+                                doAction={doAction}
+                                tableHeaderColor="primary"
+                                tableHead={["id", "titulo"]}
+                                tableData={groups}
+                            />
+                        </CardBody>
+                        <CardFooter>
+                            <Button onClick={doCreateGroup} color="primary"> {newGroupSelected ? "Ocultar Criação" : "Criar Grupo"} </Button>
+                        </CardFooter>
+                    </Card>
+                    {newGroupSelected ? <CreateGroup currentMinistrieId={props.currentMinistrieObject.id} onCreate={getGroups} /> : null}
+                    <AssociateMembersGroup ministerId={props.currentMinistrieObject.id} ref={ref} />
+                </GridItem>
+            </GridContainer>
     );
 }

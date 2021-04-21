@@ -54,7 +54,8 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
   const [members, setMembers] = React.useState([]);
   const [tableCheckedIndex, setTableCheckedIndex] = React.useState([]);
   const classes = useStyles();
-  
+  const { ministerId } = props;
+
   React.useImperativeHandle(ref, () => {
     return {
       setId: setNewId
@@ -70,7 +71,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
-      await HttpService.getMembersNotAssociateOnGroup(user, id)
+      await HttpService.getMembersNotAssociateOnGroup(user, ministerId, id)
         .then((response) => {
           setMembersNotAssociated(response.data);
         });
@@ -117,7 +118,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
       setLoading(false);
     }
   }
-  
+
   React.useEffect(() => {
     setLoading(false);
   }, []);
