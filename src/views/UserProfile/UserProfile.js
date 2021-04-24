@@ -169,6 +169,7 @@ export default function UserProfile(props) {
   const [email, setEmail] = React.useState("");
   const [name, setName] = React.useState("");
   const [cpf, setCpf] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [cep, setCep] = React.useState("");
   const [city, setCity] = React.useState("");
@@ -217,6 +218,8 @@ export default function UserProfile(props) {
   }
 
   function onDrop(picture) {
+    if (picture.length === 0)
+      return;
     console.log(picture[0]);
     setPhoto(picture[0]);
     setImageSrc(URL.createObjectURL(picture[0]));
@@ -225,7 +228,7 @@ export default function UserProfile(props) {
   async function handleSubmit() {
     const user = UserService.getLoggedUser();
     let birth = selectedDate.toISOString().slice(0, 10);
-    if (cpf.length === 14 && name !== "" && phone !== "" && birth !== "" && cep.length === 9 && uf !== "" && city !== "" && district !== null && place !== "" && number !== "") {
+    if (password !== "" && cpf.length === 14 && name !== "" && phone !== "" && birth !== "" && cep.length === 9 && uf !== "" && city !== "" && district !== null && place !== "" && number !== "") {
       if (email !== "" && !EmailValidator.validate(email)) {
         NotificationManager.error(`Email inválido!`);
         return;
@@ -238,7 +241,7 @@ export default function UserProfile(props) {
         NotificationManager.error(`Data de nascimento inválida!`);
         return;
       }
-      const member = { "email": email, "cpf": cpf, "nome": name, "telefone": phone, "nascimento": birth, "password": cpf, "endereco": { "bairro": district, "cep": cep, "complemento": complement, "localidade": city, "logradouro": place, "uf": uf, "numero": number } };
+      const member = { "email": email, "cpf": cpf, "nome": name, "telefone": phone, "nascimento": birth, "password": password, "endereco": { "bairro": district, "cep": cep, "complemento": complement, "localidade": city, "logradouro": place, "uf": uf, "numero": number } };
       try {
         await HttpService.saveMember(user, member)
           .then((response) => {
@@ -269,7 +272,7 @@ export default function UserProfile(props) {
             </CardHeader>
             <CardBody>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={8}>
+                <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Nome"
                     id="username"
@@ -298,6 +301,20 @@ export default function UserProfile(props) {
                       type: "text",
                       onChange: (event => setCpf(cpfMask(event.target.value))),
                       value: cpf
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={4}>
+                  <CustomInput
+                    labelText="Senha"
+                    id="password"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      type: "password",
+                      onChange: (event => setPassword(event.target.value)),
+                      value: password
                     }}
                   />
                 </GridItem>
@@ -439,7 +456,7 @@ export default function UserProfile(props) {
                     }}
                     inputProps={{
                       type: "text",
-                      onChange: (event => setComplement(nameMask(event.target.value))),
+                      onChange: (event => setComplement(event.target.value)),
                       value: complement
                     }}
                   />

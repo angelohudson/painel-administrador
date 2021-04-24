@@ -152,7 +152,7 @@ export default function Activities(props) {
 
   function getActitvity() {
     return {
-      data: selectedDate.toISOString().slice(0, 19),
+      data: selectedDate.toISOString().slice(0,10) + "T" + selectedDate.toLocaleTimeString("pt-br"),
       descricao: document.getElementById("description").value,
       subtitulo: document.getElementById("sub-title").value,
       titulo: document.getElementById("title").value
