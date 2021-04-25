@@ -11,6 +11,14 @@ class HttpService {
 		});
 	}
 
+	getMe(user) {
+		const url = this._getUrl('auth/me');
+		return axios(url, {
+			method: 'GET',
+			auth: user
+		});
+	}
+
 	saveMember(user, member) {
 		const url = this._getUrl('membro');
 		return axios(url, {

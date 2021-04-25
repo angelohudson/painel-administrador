@@ -13,7 +13,8 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import secretaryRoute from "routes/secretary.js";
 import mainRoute from "routes/main.js";
-import commonRoute from "routes/common.js"
+import leaderRoute from "routes/leader.js";
+import commonRoute from "routes/common.js";
 
 import UserService from 'services/userService';
 import HttpService from 'services/httpService';
@@ -23,6 +24,8 @@ import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/logo.png";
+import httpService from "services/httpService";
+import userService from "services/userService";
 
 let ps;
 
@@ -43,6 +46,7 @@ export default function Admin({ ...rest }) {
     const [routes, setRoutes] = React.useState(mainRoute);
     const [currentMinistrie, setCurrentMinistrie] = React.useState("None");
     const [currentMinistrieObject, setCurrentMinistrieObject] = React.useState({});
+    const [user, setUser] = React.useState({});
 
     const handleImageClick = image => {
         setImage(image);
@@ -76,19 +80,40 @@ export default function Admin({ ...rest }) {
         if (ministrie === "None") {
             setRoutes(mainRoute);
             setCurrentMinistrieObject({});
+        } else {
+            let ministrieObject = ministries.find(x => x.titulo == ministrie);
+            setCurrentMinistrieObject(ministrieObject);
+            let currentRoute = commonRoute;
+            // Modifica o caminho de acordo com as funções
+            user.funcoes.forEach(f => {
+                if (ministrieObject.id !== f.ministerioId)
+                    return;
+                if (f.tipo === "SECRETARIO") {
+                    currentRoute = currentRoute.concat(secretaryRoute);
+                }
+            });
+            // Modifica o caminho de acordo com as lideranças
+            if (user.liderancas.find(m => m.ministerioDto.id == ministrieObject.id) !== undefined)
+                currentRoute = currentRoute.concat(leaderRoute);
+            // Permite tudo ao Adm
+            if (user.roles.find(m => m == "ROLE_ADMIN") !== undefined)
+                currentRoute = currentRoute.concat(leaderRoute).concat(secretaryRoute);
+            setRoutes(currentRoute);
+            rest.history.push('/admin/ministrie');
         }
-        else
-        {
-            setCurrentMinistrieObject(ministries.find(x => x.titulo == ministrie));
-        }
-        if (ministrie === "Secretaria") {
-            console.log(commonRoute.concat(secretaryRoute));
-            setRoutes(commonRoute.concat(secretaryRoute));
-            rest.history.push('/admin/ministrie')
-        }
-        if (ministrie !== "None" && ministrie !== "Secretaria") {
-            setRoutes(commonRoute);
-            rest.history.push('/admin/ministrie')
+    }
+
+    async function getMe() {
+        try {
+            const user = UserService.getLoggedUser()
+            await HttpService.getMe(user)
+                .then((response) => {
+                    setUser(response.data);
+                    setLoading(false);
+                });
+        } catch (e) {
+            console.log(e.message);
+            NotificationManager.warning(e.message);
         }
     }
 
@@ -132,6 +157,7 @@ export default function Admin({ ...rest }) {
             return
         }
         getMinistries();
+        getMe();
     }, []);
     return (
         <div className={classes.wrapper}>
