@@ -16,13 +16,41 @@ import { LinearProgress } from '@material-ui/core';
 export default class Calendar extends React.PureComponent {
     constructor(props) {
         super(props);
-        const user = userService.getLoggedUser();
         this.state = {
             loading: false,
             data: []
         }
 
-        httpService.getActivitiesByPeriod(user, props.currentMinistrieObject.id, "2020-01-18T00:00:00", "2022-04-18T00:00:00").then((response) => {
+        var dataInicial = new Date();
+        var dataFinal = new Date();
+        dataInicial.setMonth(dataInicial.getMonth());
+        dataFinal.setMonth(dataFinal.getMonth() + 1);
+        dataInicial.setDate(1);
+        dataFinal.setDate(0);
+
+        this.updateSchedules(
+            dataInicial.toISOString().slice(0, 10) + "T" + dataInicial.toLocaleTimeString("pt-br"),
+            dataFinal.toISOString().slice(0, 10) + "T" + dataFinal.toLocaleTimeString("pt-br"),
+            new Date(),
+            props.currentMinistrieObject.id
+        );
+
+        this.currentDateChange = (currentDate) => {
+            var dataInicial = new Date(currentDate);
+            var dataFinal = new Date(currentDate);
+            dataFinal.setDate(dataFinal.getDate() + 7);
+            this.updateSchedules(
+                dataInicial.toISOString().slice(0, 10) + "T" + dataInicial.toLocaleTimeString("pt-br"),
+                dataFinal.toISOString().slice(0, 10) + "T" + dataFinal.toLocaleTimeString("pt-br"),
+                currentDate,
+                props.currentMinistrieObject.id
+            );
+        };
+    }
+
+    updateSchedules(beginDate, endDate, currentDate, id) {
+        const user = userService.getLoggedUser();
+        httpService.getActivitiesByPeriod(user, id, beginDate, endDate).then((response) => {
             console.log(response);
             this.setState((state, props) => {
                 let datas = this.groupBy(response.data, d => d.titulo + d.data + d.subtitulo);
@@ -30,7 +58,7 @@ export default class Calendar extends React.PureComponent {
                     return {
                         title: d.value.titulo,
                         startDate: new Date(d.value.data),
-                        endDate: new Date(d.value.data),
+                        endDate: new Date(d.value.dataFim),
                         id: d.value.id,
                         location: d.value.subtitulo,
                     }
@@ -38,11 +66,10 @@ export default class Calendar extends React.PureComponent {
                 return {
                     data: data,
                     loading: false,
-                    currentDate: new Date(),
+                    currentDate: currentDate,
                 };
             });
         });
-        this.currentDateChange = (currentDate) => { this.setState({ currentDate }); };
     }
 
     groupBy(list, keyGetter) {

@@ -49,6 +49,7 @@ const useStyles = makeStyles(styles);
 export default function Activities(props) {
   const [loading, setLoading] = React.useState({ ...props.loading });
   const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [selectedEndDate, setSelectedEndDate] = React.useState(new Date());
   const [groups, setGroups] = React.useState([]);
   const [groupId, setGroupId] = React.useState("");
   const [apportionmentType, setApportionmentType] = React.useState("group");
@@ -123,6 +124,11 @@ export default function Activities(props) {
       NotificationManager.warning("Campo data não preenchido");
       return false;
     }
+    if (!selectedEndDate.toISOString()) {
+      NotificationManager.warning("Campo data final não preenchido");
+      return false;
+    }
+
     return true;
   }
 
@@ -142,7 +148,8 @@ export default function Activities(props) {
         }
       }).filter(v => v),
       task: {
-        data: selectedDate.toISOString().slice(0, 19),
+        dataInicio: selectedDate.toLocaleDateString("pt-Br"),
+        dataFim: selectedEndDate.toLocaleDateString("pt-Br"),
         descricao: document.getElementById("description").value,
         subtitulo: document.getElementById("sub-title").value,
         titulo: document.getElementById("title").value
@@ -151,12 +158,14 @@ export default function Activities(props) {
   }
 
   function getActitvity() {
-    return {
-      data: selectedDate.toISOString().slice(0,10) + "T" + selectedDate.toLocaleTimeString("pt-br"),
+    var activity = {
+      dataInicio: selectedDate.toLocaleDateString("pt-Br") + "T" + selectedDate.toLocaleTimeString("pt-br"),
+      dataFim: selectedEndDate.toLocaleDateString("pt-Br") + "T" + selectedEndDate.toLocaleTimeString("pt-br"),
       descricao: document.getElementById("description").value,
       subtitulo: document.getElementById("sub-title").value,
       titulo: document.getElementById("title").value
     };
+    return activity;
   }
 
   React.useEffect(() => {
@@ -165,6 +174,10 @@ export default function Activities(props) {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setSelectedEndDate(date);
   };
 
   return (
@@ -190,13 +203,26 @@ export default function Activities(props) {
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
-                  <GridItem xs={12} sm={12} md={6}>
+                  <GridItem xs={12} sm={12} md={3}>
                     <CustomInput
-                      id="birthday"
+                      id="beginDate"
                       type="date"
                       selectedDate={selectedDate}
                       labelDate="Data de inicio da atividade"
                       handleDateChange={handleDateChange}
+                      format="dd/MM/yyyy HH:mm"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                    <CustomInput
+                      id="endDate"
+                      type="date"
+                      selectedDate={selectedEndDate}
+                      labelDate="Data de fim da atividade"
+                      handleDateChange={handleEndDateChange}
                       format="dd/MM/yyyy HH:mm"
                       formControlProps={{
                         fullWidth: true
