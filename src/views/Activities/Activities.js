@@ -148,8 +148,8 @@ export default function Activities(props) {
         }
       }).filter(v => v),
       task: {
-        dataInicio: selectedDate.toLocaleDateString("pt-Br"),
-        dataFim: selectedEndDate.toLocaleDateString("pt-Br"),
+        dataInicio: selectedDate.toLocaleDateString("pt-Br") + "T" + selectedDate.toLocaleTimeString("pt-br"),
+        dataFim: selectedEndDate.toLocaleDateString("pt-Br") + "T" + selectedEndDate.toLocaleTimeString("pt-br"),
         descricao: document.getElementById("description").value,
         subtitulo: document.getElementById("sub-title").value,
         titulo: document.getElementById("title").value
