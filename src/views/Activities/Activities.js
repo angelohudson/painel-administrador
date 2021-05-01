@@ -21,9 +21,6 @@ import UserService from 'services/userService';
 import HttpService from 'services/httpService';
 import { NotificationManager } from "react-notifications";
 import Schedule from "views/Schedule/Schedule";
-import { validate } from "email-validator";
-
-// import avatar from "assets/img/faces/gerson.jpg";
 
 const styles = {
   cardCategoryWhite: {
@@ -52,9 +49,10 @@ export default function Activities(props) {
   const [selectedEndDate, setSelectedEndDate] = React.useState(new Date());
   const [groups, setGroups] = React.useState([]);
   const [groupId, setGroupId] = React.useState("");
+  const [message, setMessage] = React.useState("");
   const [apportionmentType, setApportionmentType] = React.useState("group");
+  const [meberFunctions, setMeberFunctions] = React.useState(new Map());
   const classes = useStyles();
-  let meberFunctions = new Map();
 
   function handleChange(event, value) {
     if (value)
@@ -66,7 +64,7 @@ export default function Activities(props) {
   }
 
   function clearMeberFunctions(index, meberFunctionsId) {
-    meberFunctions = new Map();
+    setMeberFunctions(new Map());
   }
 
   async function getGroups() {
@@ -88,17 +86,30 @@ export default function Activities(props) {
   async function doRegister() {
     if (!validate())
       return;
+    setMessage("");
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
       if (apportionmentType == 'group') {
         if (groupId) {
-          await HttpService.addActivitiesByGroup(user, groupId, getActitvity()).then((response) => { setLoading(false); setGroupId(""); });
+          await HttpService.addActivitiesByGroup(user, groupId, getActitvity()).then((response) => { setLoading(false); setGroupId(""); NotificationManager.success('Cadastrado com sucesso!'); });
         } else {
-          await HttpService.addActivities(user, props.currentMinistrieObject.id, getActitvity()).then((response) => setLoading(false));
+          await HttpService.addActivities(user, props.currentMinistrieObject.id, getActitvity()).then((response) => { setLoading(false); NotificationManager.success('Cadastrado com sucesso!'); });
         }
       } else if (apportionmentType == 'schedule') {
-        await HttpService.addSchedule(user, props.currentMinistrieObject.id, getSchedule()).then((response) => setLoading(false));
+        await HttpService.addSchedule(user, props.currentMinistrieObject.id, getSchedule()).then((response) => {
+          let busyMembers = response.data;
+          if (busyMembers.length) {
+            let busyMembersMessage = "Alguns membros já estão atarefados nesse dia e horário. "
+            busyMembers.forEach((m) => {
+              busyMembersMessage += m.membro.nome + "; ";
+            });
+            console.log(busyMembersMessage);
+            setMessage(busyMembersMessage);
+          }
+          NotificationManager.success('Cadastrado com sucesso!');
+          setLoading(false);
+        });
       }
     } catch (e) {
       console.log(e.message);
@@ -182,109 +193,112 @@ export default function Activities(props) {
 
   return (
     <div>
-      {loading ? <LinearProgress /> :
-        < GridContainer >
-          <GridItem xs={12} sm={12} md={12}>
-            <Card>
-              <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Cadastrar Atividade</h4>
-                <p className={classes.cardCategoryWhite}>Preencha as informações da atividade</p>
-              </CardHeader>
-              <CardBody>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={12}>
-                    <CustomInput
-                      labelText="Título da Atividade"
-                      id="title"
+      {loading ? <LinearProgress /> : null}
+      < GridContainer >
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>Cadastrar Atividade</h4>
+              <p className={classes.cardCategoryWhite}>Preencha as informações da atividade</p>
+            </CardHeader>
+            <CardBody>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  <CustomInput
+                    labelText="Título da Atividade"
+                    id="title"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={3}>
+                  <CustomInput
+                    id="beginDate"
+                    type="date"
+                    selectedDate={selectedDate}
+                    labelDate="Data de inicio da atividade"
+                    handleDateChange={handleDateChange}
+                    format="dd/MM/yyyy HH:mm"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={3}>
+                  <CustomInput
+                    id="endDate"
+                    type="date"
+                    selectedDate={selectedEndDate}
+                    labelDate="Data de fim da atividade"
+                    handleDateChange={handleEndDateChange}
+                    format="dd/MM/yyyy HH:mm"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6}>
+                  <CustomInput
+                    labelText="Sub título"
+                    id="sub-title"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  <CustomInput
+                    labelText="Descrição da atividade"
+                    id="description"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 5
+                    }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={3}>
+                  <ToggleButtonGroup value={apportionmentType} exclusive onChange={handleChange}>
+                    <ToggleButton value="group" aria-label="list"> <Group /> </ToggleButton>
+                    <ToggleButton value="schedule" aria-label="module"> <ScheduleIcon /> </ToggleButton>
+                  </ToggleButtonGroup>
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  {apportionmentType == 'group' ?
+                    <CustomSelect
                       formControlProps={{
                         fullWidth: true
                       }}
-                    />
-                  </GridItem>
-                </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={3}>
-                    <CustomInput
-                      id="beginDate"
-                      type="date"
-                      selectedDate={selectedDate}
-                      labelDate="Data de inicio da atividade"
-                      handleDateChange={handleDateChange}
-                      format="dd/MM/yyyy HH:mm"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={3}>
-                    <CustomInput
-                      id="endDate"
-                      type="date"
-                      selectedDate={selectedEndDate}
-                      labelDate="Data de fim da atividade"
-                      handleDateChange={handleEndDateChange}
-                      format="dd/MM/yyyy HH:mm"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="Sub título"
-                      id="sub-title"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                    />
-                  </GridItem>
-                </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={12}>
-                    <CustomInput
-                      labelText="Descrição da atividade"
-                      id="description"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 5
-                      }}
-                    />
-                  </GridItem>
-                </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={3}>
-                    <ToggleButtonGroup value={apportionmentType} exclusive onChange={handleChange}>
-                      <ToggleButton value="group" aria-label="list"> <Group /> </ToggleButton>
-                      <ToggleButton value="schedule" aria-label="module"> <ScheduleIcon /> </ToggleButton>
-                    </ToggleButtonGroup>
-                  </GridItem>
-                </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={12}>
-                    {apportionmentType == 'group' ?
-                      <CustomSelect
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        itens={groups.map((g) => { return { id: g.id, value: g.titulo }; })}
-                        name="Grupos"
-                        id="groups"
-                        onChange={setGroupId}
-                      /> :
-                      <Schedule clearMeberFunctions={clearMeberFunctions} addMeberFunctions={addMeberFunctions} currentMinistrieObject={props.currentMinistrieObject} />
-                    }
-                  </GridItem>
-                </GridContainer>
-              </CardBody>
-              <CardFooter>
-                <Button color="primary" onClick={doRegister}>Cadastrar</Button>
-              </CardFooter>
-            </Card>
-          </GridItem>
-        </GridContainer>}
+                      itens={groups.map((g) => { return { id: g.id, value: g.titulo }; })}
+                      name="Grupos"
+                      id="groups"
+                      onChange={setGroupId}
+                    /> :
+                    <Schedule clearMeberFunctions={clearMeberFunctions} addMeberFunctions={addMeberFunctions} currentMinistrieObject={props.currentMinistrieObject} />
+                  }
+                </GridItem>
+                <GridItem xs={12} sm={12} md={12}>
+                  {message}
+                </GridItem>
+              </GridContainer>
+            </CardBody>
+            <CardFooter>
+              <Button disabled={loading} color="primary" onClick={doRegister}>Cadastrar</Button>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
     </div >
   );
 }

@@ -38,6 +38,14 @@ import Calendar from 'views/Calendar/Calendar';
 
 const leaderRoute = [
   {
+    path: "/ministrie",
+    hidden: false,
+    name: "Ministério",
+    icon: "content_paste",
+    component: MemberList,
+    layout: "/admin"
+  },
+  {
     path: "/associate-members",
     hidden: true,
     name: "Associar Membros",

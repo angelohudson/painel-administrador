@@ -24,8 +24,6 @@ import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/logo.png";
-import httpService from "services/httpService";
-import userService from "services/userService";
 
 let ps;
 
@@ -94,7 +92,11 @@ export default function Admin({ ...rest }) {
             if (user.roles.find(m => m == "ROLE_ADMIN") !== undefined)
                 currentRoute = currentRoute.concat(leaderRoute);
             setRoutes(currentRoute);
-            rest.history.push('/admin/ministrie');
+
+            console.log(currentRoute);
+
+            if (currentRoute.length > 1)
+                rest.history.push('/admin' + currentRoute[1].path);
         }
     }
 

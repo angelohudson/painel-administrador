@@ -30,14 +30,6 @@ const commonRoute = [
     component: Ministries,
     layout: "/admin"
   },
-  {
-    path: "/ministrie",
-    hidden: false,
-    name: "Ministério",
-    icon: "content_paste",
-    component: MemberList,
-    layout: "/admin"
-  },
 ];
 
 export default commonRoute;
