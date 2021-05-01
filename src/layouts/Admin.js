@@ -84,20 +84,15 @@ export default function Admin({ ...rest }) {
             let ministrieObject = ministries.find(x => x.titulo == ministrie);
             setCurrentMinistrieObject(ministrieObject);
             let currentRoute = commonRoute;
-            // Modifica o caminho de acordo com as funções
-            user.funcoes.forEach(f => {
-                if (ministrieObject.id !== f.ministerioId)
-                    return;
-                if (f.tipo === "SECRETARIO") {
-                    currentRoute = currentRoute.concat(secretaryRoute);
-                }
-            });
+            // Modifica o caminho de acordo com o ministério
+            if (ministrieObject.titulo === "Secretaria")
+                currentRoute = currentRoute.concat(secretaryRoute);
             // Modifica o caminho de acordo com as lideranças
             if (user.liderancas.find(m => m.ministerioDto.id == ministrieObject.id) !== undefined)
                 currentRoute = currentRoute.concat(leaderRoute);
             // Permite tudo ao Adm
             if (user.roles.find(m => m == "ROLE_ADMIN") !== undefined)
-                currentRoute = currentRoute.concat(leaderRoute).concat(secretaryRoute);
+                currentRoute = currentRoute.concat(leaderRoute);
             setRoutes(currentRoute);
             rest.history.push('/admin/ministrie');
         }
