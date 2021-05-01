@@ -75,6 +75,24 @@ export default function MemberList(props) {
     props.history.push('/admin/associate-members');
   }
 
+  async function doRemove(id) {
+    try {
+      const user = UserService.getLoggedUser()
+      await HttpService.removeMemberOnMinistry(user, id, props.currentMinistrieObject.id)
+        .then((response) => {
+          console.log(response);
+          setMembers(members.filter((m) => m.id != id));
+        });
+    } catch (e) {
+      console.log(e.message);
+      NotificationManager.warning(e.message);
+    }
+  }
+
+  function doEdit(id) {
+    NotificationManager.warning("Desculpe, estamos implementando essa funcionalidade!");
+  }
+
   React.useEffect(() => {
     getMembers();
   }, []);
@@ -90,6 +108,15 @@ export default function MemberList(props) {
             </CardHeader>
             <CardBody>
               <Table
+                idColumn={"id"}
+                tableActions={[{
+                  buttonText: "Remover",
+                  doAction: doRemove,
+                  buttonColor: "danger"
+                }, {
+                  buttonText: "Editar",
+                  doAction: doEdit,
+                }]}
                 tableHeaderColor="primary"
                 tableHead={["nome", "email", "nascimento"]}
                 tableData={members}

@@ -17,8 +17,15 @@ const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  const { doAction , tableAction, idColumn, tableLink, tableHead, tableData, tableHeaderColor, tableSelectable, tableCheckedIndex, tableSetCheckedIndex } = props;
-  
+  let { tableActions } = props;
+  const { idColumn,
+    tableLink,
+    tableHead, tableData, tableHeaderColor,
+    tableSelectable, tableCheckedIndex, tableSetCheckedIndex } = props;
+
+  if (tableActions == undefined)
+    tableActions = [];
+
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -35,8 +42,8 @@ export default function CustomTable(props) {
                   </TableCell>
                 );
               })}
-              {tableSelectable ? <TableCell className={classes.tableCell + " " + classes.tableHeadCell}> selecione </TableCell> : null }
-              {tableAction ? <TableCell className={classes.tableCell + " " + classes.tableHeadCell}> Ações </TableCell> : null}
+              {tableSelectable ? <TableCell className={classes.tableCell + " " + classes.tableHeadCell}> selecione </TableCell> : null}
+              {tableActions.map((prop, key) => { return <TableCell className={classes.tableCell + " " + classes.tableHeadCell}> {prop.buttonText} </TableCell> })}
             </TableRow>
           </TableHead>
         ) : null}
@@ -66,12 +73,11 @@ export default function CustomTable(props) {
                       </TableCell>
                       : null
                     }
-                    {tableAction ?
-                      <TableCell className={classes.tableCell}>
-                        <Button onClick={function() {doAction(obj[idColumn])}} color="primary"> Associar Membros </Button>
+                    {tableActions.map((prop, key) => {
+                      return <TableCell className={classes.tableCell}>
+                        <Button {...prop.buttonProps} onClick={function () { prop.doAction(obj[idColumn]) }} color={prop.buttonColor ? prop.buttonColor : "primary"}> {prop.buttonText} </Button>
                       </TableCell>
-                      : null
-                    }
+                    })}
                     {tableLink ?
                       <TableCell className={classes.tableCell}>
                         <Link to={tableLink + obj[idColumn]}> <Button color="primary"> Associar Membros </Button> </Link>

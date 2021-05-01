@@ -63,7 +63,9 @@ export default function Leadership(props) {
                 .then((response) => {
                     console.log(response);
                     setLeaders(response.data.map(function (leader) {
-                        return leader.membroDto;
+                        let data = leader.membroDto;
+                        data.leaderId = leader.id;
+                        return data;
                     }));
                     setLoading(false);
                 });
@@ -71,6 +73,20 @@ export default function Leadership(props) {
             console.log(e.message);
             NotificationManager.warning(e.message);
             setLoading(false);
+        }
+    }
+
+    async function doRemove(id) {
+        try {
+            const user = UserService.getLoggedUser()
+            await HttpService.removeMemberOnLeadership(user, id)
+                .then((response) => {
+                    console.log(response);
+                    setLeaders(leaders.filter((m) => m.leaderId != id));
+                });
+        } catch (e) {
+            console.log(e.message);
+            NotificationManager.warning(e.message);
         }
     }
 
@@ -94,6 +110,12 @@ export default function Leadership(props) {
                         </CardHeader>
                         <CardBody>
                             <Table
+                                idColumn={"leaderId"}
+                                tableActions={[{
+                                    buttonText: "Remover",
+                                    doAction: doRemove,
+                                    buttonColor: "danger"
+                                }]}
                                 tableHeaderColor="primary"
                                 tableHead={["nome", "email", "nascimento"]}
                                 tableData={leaders}

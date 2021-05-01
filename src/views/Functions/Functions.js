@@ -96,8 +96,10 @@ export default function Functions(props) {
                         <CardBody>
                             <Table
                                 idColumn={"id"}
-                                tableAction={true}
-                                doAction={doAction}
+                                tableActions={[{
+                                    buttonText: "Associa Membro",
+                                    doAction: doAction,
+                                }]}
                                 tableHeaderColor="primary"
                                 tableHead={["id", "titulo"]}
                                 tableData={functions}

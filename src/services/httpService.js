@@ -138,6 +138,22 @@ class HttpService {
 		});
 	}
 
+	removeMemberOnMinistry(user, memberId, ministryId) {
+		const url = this._getUrl(`ministerio/remove-membro/` + ministryId + "/" + memberId);
+		return axios(url, {
+			method: 'DELETE',
+			auth: user,
+		});
+	}
+
+	removeMemberOnLeadership(user, leadershipId) {
+		const url = this._getUrl(`lideranca/${leadershipId}`);
+		return axios(url, {
+			method: 'DELETE',
+			auth: user,
+		});
+	}
+
 	removeMembersOnGroup(user, members, groupId) {
 		const url = this._getUrl(`grupo/remove-membro`);
 		const form = { "membros": members, "grupoId": groupId };
