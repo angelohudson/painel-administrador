@@ -49,7 +49,6 @@ export default function Activities(props) {
   const [selectedEndDate, setSelectedEndDate] = React.useState(new Date());
   const [groups, setGroups] = React.useState([]);
   const [groupId, setGroupId] = React.useState("");
-  const [message, setMessage] = React.useState("");
   const [apportionmentType, setApportionmentType] = React.useState("group");
   const [meberFunctions, setMeberFunctions] = React.useState(new Map());
   const classes = useStyles();
@@ -86,7 +85,6 @@ export default function Activities(props) {
   async function doRegister() {
     if (!validate())
       return;
-    setMessage("");
     setLoading(true);
     try {
       const user = UserService.getLoggedUser()
@@ -100,14 +98,11 @@ export default function Activities(props) {
         await HttpService.addSchedule(user, props.currentMinistrieObject.id, getSchedule()).then((response) => {
           let busyMembers = response.data;
           if (busyMembers.length) {
-            let busyMembersMessage = "Alguns membros já estão atarefados nesse dia e horário. "
-            busyMembers.forEach((m) => {
-              busyMembersMessage += m.membro.nome + "; ";
-            });
-            console.log(busyMembersMessage);
-            setMessage(busyMembersMessage);
+            NotificationManager.warning('Alguns membros não estarão disponíveis nessa data');
+            busyMembers.forEach(busyMember => NotificationManager.warning(busyMember.membro.nome + " estará ocupado"));
+          } else {
+            NotificationManager.success('Cadastrado com sucesso!');
           }
-          NotificationManager.success('Cadastrado com sucesso!');
           setLoading(false);
         });
       }
@@ -287,9 +282,6 @@ export default function Activities(props) {
                     /> :
                     <Schedule clearMeberFunctions={clearMeberFunctions} addMeberFunctions={addMeberFunctions} currentMinistrieObject={props.currentMinistrieObject} />
                   }
-                </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
-                  {message}
                 </GridItem>
               </GridContainer>
             </CardBody>
