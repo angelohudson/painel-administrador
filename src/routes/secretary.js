@@ -22,7 +22,7 @@ import UserProfile from "views/UserProfile/UserProfile.js";
 
 const secretaryRoute = [
   {
-    path: "/add-member",
+    path: "/add-member/",
     hidden: false,
     name: "Cadastro de Membro",
     icon: PersonAddIcon,

@@ -18,8 +18,8 @@
 // @material-ui/icons
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import AppsIcon from '@material-ui/icons/Apps';
 import Group from '@material-ui/icons/Group';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import EventIcon from '@material-ui/icons/Event';
 
 // core components/views for Admin layout
@@ -35,8 +35,17 @@ import Functions from "views/Functions/Functions.js";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import BuildIcon from '@material-ui/icons/Build';
 import Calendar from 'views/Calendar/Calendar';
+import UserProfile from 'views/UserProfile/UserProfile';
 
 const leaderRoute = [
+  {
+    path: "/update-member/:id",
+    hidden: true,
+    name: "Editar de Membro",
+    icon: PersonAddIcon,
+    component: UserProfile,
+    layout: "/admin"
+  },
   {
     path: "/ministrie",
     hidden: false,
