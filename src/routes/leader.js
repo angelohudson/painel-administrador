@@ -29,12 +29,14 @@ import AssociateMembers from "views/AssociateMembers/AssociateMembers.js";
 import Activities from "views/Activities/Activities.js";
 import Leadership from "views/Leadership/Leadership.js";
 import AssociateLeaders from "views/AssociateLeaders/AssociateLeaders.js";
+import ScaleReport from 'views/ScaleReport/ScaleReport';
 
 import Groups from "views/Groups/Groups.js";
 import Functions from "views/Functions/Functions.js";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import BuildIcon from '@material-ui/icons/Build';
 import Calendar from 'views/Calendar/Calendar';
+import ScheduleIcon from '@material-ui/icons/Schedule';
 
 const leaderRoute = [
   {
@@ -99,6 +101,14 @@ const leaderRoute = [
     name: "Calendário",
     icon: EventIcon,
     component: Calendar,
+    layout: "/admin"
+  },
+  {
+    path: "/scale",
+    hidden: false,
+    name: "Escala",
+    icon: ScheduleIcon,
+    component: ScaleReport,
     layout: "/admin"
   },
 ];

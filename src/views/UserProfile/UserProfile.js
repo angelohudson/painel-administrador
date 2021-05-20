@@ -164,7 +164,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function UserProfile(props) {
-  const [selectedDate, setSelectedDate] = React.useState(new Date('1997-08-12T00:00:00'));
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
   const classes = useStyles();
   const [email, setEmail] = React.useState("");
   const [name, setName] = React.useState("");
