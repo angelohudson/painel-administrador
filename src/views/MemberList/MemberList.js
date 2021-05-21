@@ -90,7 +90,7 @@ export default function MemberList(props) {
   }
 
   function doEdit(id) {
-    NotificationManager.warning("Desculpe, estamos implementando essa funcionalidade!");
+    props.history.push('/admin/update-member/' + id);
   }
 
   React.useEffect(() => {

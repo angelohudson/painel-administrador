@@ -12,22 +12,58 @@ import TableCell from "@material-ui/core/TableCell";
 import styles from "assets/jss/material-dashboard-react/components/tableStyle.js";
 import Button from "components/CustomButtons/Button.js";
 import { Link } from "react-router-dom";
+import CustomInput from "components/CustomInput/CustomInput";
 
 const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  let { tableActions } = props;
-  const { idColumn,
+  const [inputValue, setInputValue] = React.useState("");
+  const [tableDataView, setTableDataView] = React.useState([]);
+  const {
+    idColumn,
     tableLink,
-    tableHead, tableData, tableHeaderColor,
-    tableSelectable, tableCheckedIndex, tableSetCheckedIndex } = props;
+    tableHead, tableHeaderColor,
+    tableData,
+    tableSelectable, tableCheckedIndex, tableSetCheckedIndex
+  } = props;
+  let { tableActions } = props;
 
   if (tableActions == undefined)
     tableActions = [];
 
+  function filter(event) {
+    let value = event.target.value;
+    let newTable = tableData.filter((item) => {
+      let result = false;
+      for (let index = 0; index < tableHead.length; index++) {
+        if (item[tableHead[index]] && !result)
+          result = (item[tableHead[index]] + "").includes(value);
+      }
+      return result;
+    });
+    setTableDataView(newTable);
+    setInputValue(value);
+  }
+
+  React.useEffect(() => {
+    setTableDataView(props.tableData);
+  }, [props.tableData])
+
   return (
     <div className={classes.tableResponsive}>
+      <CustomInput
+        labelText="Buscar"
+        id="search"
+        formControlProps={{
+          fullWidth: false,
+        }}
+        inputProps={{
+          type: "text",
+          onChange: filter,
+          value: inputValue
+        }}
+      />
       <Table className={classes.table}>
         {tableHead !== undefined ? (
           <TableHead className={classes[tableHeaderColor + "TableHeader"]}>
@@ -50,7 +86,7 @@ export default function CustomTable(props) {
         {
           <TableBody>
             {
-              tableData.map((prop, key) => {
+              tableDataView.map((prop, key) => {
                 const obj = prop;
                 return (
                   <TableRow key={key} className={classes.tableBodyRow}>

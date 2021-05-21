@@ -18,7 +18,6 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import ImageUploader from 'react-images-upload';
 
-import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 
 import UserService from 'services/userService';
@@ -30,6 +29,7 @@ import * as EmailValidator from 'email-validator';
 import { numberMask } from "utils/mask";
 
 import avatar from "assets/img/faces/default-user.jpg";
+import { useParams, useRouteMatch } from "react-router-dom";
 
 const states = [
   {
@@ -166,6 +166,8 @@ const useStyles = makeStyles(styles);
 export default function UserProfile(props) {
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const classes = useStyles();
+  const [id, setId] = React.useState(null);
+  const [selectedDate, setSelectedDate] = React.useState(new Date('1997-08-12T00:00:00'));
   const [email, setEmail] = React.useState("");
   const [name, setName] = React.useState("");
   const [cpf, setCpf] = React.useState("");
@@ -260,6 +262,13 @@ export default function UserProfile(props) {
       NotificationManager.error(`Campos inválidos!`);
     }
   }
+
+  React.useEffect(() => {
+    if (props.match.params) {
+      console.log(props.match.params.id);
+      setId(props.match.params.id);
+    }
+  }, []);
 
   return (
     <div>

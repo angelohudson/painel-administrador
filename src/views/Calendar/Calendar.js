@@ -14,43 +14,31 @@ import userService from 'services/userService';
 import { LinearProgress } from '@material-ui/core';
 
 export default class Calendar extends React.PureComponent {
+    ministrie = null;
+
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
             data: []
         }
-
-        var dataInicial = new Date();
-        var dataFinal = new Date();
-        dataInicial.setMonth(dataInicial.getMonth());
-        dataFinal.setMonth(dataFinal.getMonth() + 1);
-        dataInicial.setDate(1);
-        dataFinal.setDate(0);
-
-        this.updateSchedules(
-            dataInicial.toISOString().slice(0, 10) + "T" + dataInicial.toLocaleTimeString("pt-br"),
-            dataFinal.toISOString().slice(0, 10) + "T" + dataFinal.toLocaleTimeString("pt-br"),
-            new Date(),
-            props.currentMinistrieObject.id
-        );
-
-        this.currentDateChange = (currentDate) => {
-            var dataInicial = new Date(currentDate);
-            var dataFinal = new Date(currentDate);
-            dataFinal.setDate(dataFinal.getDate() + 7);
-            this.updateSchedules(
-                dataInicial.toISOString().slice(0, 10) + "T" + dataInicial.toLocaleTimeString("pt-br"),
-                dataFinal.toISOString().slice(0, 10) + "T" + dataFinal.toLocaleTimeString("pt-br"),
-                currentDate,
-                props.currentMinistrieObject.id
-            );
-        };
+        this.ministrie = props.currentMinistrieObject.id;
+        this.updateSchedules(new Date());
+        this.currentDateChange = (currentDate) => { this.updateSchedules(currentDate); }
     }
 
-    updateSchedules(beginDate, endDate, currentDate, id) {
+
+    updateSchedules(currentDate) {
+        var beginDate = new Date(currentDate);
+        var endDate = new Date(currentDate);
+        beginDate.setDate(beginDate.getDate() - beginDate.getDay())
+        endDate.setDate(6 - endDate.getDay() + endDate.getDate());
+
+        let beginDateStr = beginDate.toISOString().slice(0, 10) + "T" + beginDate.toLocaleTimeString("pt-br");
+        let endDateStr = endDate.toISOString().slice(0, 10) + "T" + endDate.toLocaleTimeString("pt-br");
+
         const user = userService.getLoggedUser();
-        httpService.getActivitiesByPeriod(user, id, beginDate, endDate).then((response) => {
+        httpService.getActivitiesByPeriod(user, this.ministrie, beginDateStr, endDateStr).then((response) => {
             console.log(response);
             this.setState((state, props) => {
                 let datas = this.groupBy(response.data, d => d.titulo + d.data + d.subtitulo);
@@ -90,7 +78,7 @@ export default class Calendar extends React.PureComponent {
         return (
             loading ? <LinearProgress /> :
                 <Paper>
-                    <Scheduler data={data} height={660}>
+                    <Scheduler data={data} height={500}>
                         <ViewState currentDate={currentDate} onCurrentDateChange={this.currentDateChange} />
                         <WeekView startDayHour={0} endDayHour={24} />
                         <Toolbar />

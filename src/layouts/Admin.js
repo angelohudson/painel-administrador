@@ -185,7 +185,14 @@ export default function Admin({ ...rest }) {
                                     return (
                                         <Route
                                             path={prop.layout + prop.path}
-                                            render={() => (<prop.component loading={true} loading={loading} ministries={ministries} changeMinistrie={changeMinistrie} currentMinistrieObject={currentMinistrieObject} history={rest.history} />)}
+                                            render={(props) => (<prop.component
+                                                loading={true}
+                                                loading={loading}
+                                                ministries={ministries}
+                                                changeMinistrie={changeMinistrie}
+                                                currentMinistrieObject={currentMinistrieObject}
+                                                history={rest.history}
+                                                {...props} />)}
                                             key={key}
                                         />
                                     );
