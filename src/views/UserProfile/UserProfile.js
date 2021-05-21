@@ -167,7 +167,6 @@ export default function UserProfile(props) {
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const classes = useStyles();
   const [id, setId] = React.useState(null);
-  const [selectedDate, setSelectedDate] = React.useState(new Date('1997-08-12T00:00:00'));
   const [email, setEmail] = React.useState("");
   const [name, setName] = React.useState("");
   const [cpf, setCpf] = React.useState("");

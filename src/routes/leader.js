@@ -41,19 +41,19 @@ import UserProfile from 'views/UserProfile/UserProfile';
 
 const leaderRoute = [
   {
-    path: "/update-member/:id",
-    hidden: true,
-    name: "Editar de Membro",
-    icon: PersonAddIcon,
-    component: UserProfile,
-    layout: "/admin"
-  },
-  {
     path: "/ministrie",
     hidden: false,
     name: "Ministério",
     icon: "content_paste",
     component: MemberList,
+    layout: "/admin"
+  },
+  {
+    path: "/update-member/:id",
+    hidden: true,
+    name: "Editar de Membro",
+    icon: PersonAddIcon,
+    component: UserProfile,
     layout: "/admin"
   },
   {

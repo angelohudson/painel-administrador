@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Tasks from "components/Tasks/Tasks.js";
 import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -16,6 +15,7 @@ import { LinearProgress } from "@material-ui/core";
 import UserService from 'services/userService';
 import HttpService from 'services/httpService';
 import { NotificationManager } from 'react-notifications';
+import CustomInput from "components/CustomInput/CustomInput";
 
 const styles = {
   cardCategoryWhite: {
@@ -58,17 +58,20 @@ export default function ScaleReport(props) {
 
   async function getScale() {
     setLoading(true);
+    let beginDateStr = beginDate.toISOString().slice(0, 10) + "T" + beginDate.toLocaleTimeString("pt-br");
+    let endDateStr = endDate.toISOString().slice(0, 10) + "T" + endDate.toLocaleTimeString("pt-br");
     try {
-      const user = UserService.getLoggedUser()
-      await HttpService.getActivitiesByPeriod(user, props.currentMinistrieObject.id, startDate, endDate)
+      const user = UserService.getLoggedUser();
+      await HttpService.getActivitiesByPeriod(user, props.currentMinistrieObject.id, beginDateStr, endDateStr)
         .then((response) => {
           setScale(response.data.filter((task) => task.funcaoEscala !== null).map(task => {
             return {
               titulo: task.titulo,
-              data_inicio: task.data,
-              função: task.funcaoEscala,
+              data: new Date(task.data).toLocaleDateString("pt-Br") + " " + new Date(task.data).toLocaleTimeString("pt-Br"),
+              funcao: task.funcaoEscala,
               nome: task.membro.nome,
-              justificativa: task.justificativa === null ? task.justificativa : "",
+              status: task.status === 'DEFAULT' ? "AGUARDANDO" : task.status,
+              justificativa: task.justificativa !== null ? task.justificativa : "",
             };
           }));
           setLoading(false);
@@ -80,58 +83,65 @@ export default function ScaleReport(props) {
     }
   }
 
+  React.useEffect(() => {
+    setLoading(false);
+  }, []);
+
   return (
-    loading ?
-      <LinearProgress /> :
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={5}>
-          <CustomInput
-            id="beginDate"
-            type="date"
-            labelDate="Data Inicial"
-            selectedDate={beginDate}
-            handleDateChange={setBeginDate}
-            format="dd/MM/yyyy"
-            formControlProps={{
-              fullWidth: true
-            }}
-          />
-        </GridItem>
-        <GridItem xs={12} sm={12} md={5}>
-          <CustomInput
-            id="endDate"
-            type="date"
-            labelDate="Data Final"
-            selectedDate={endDate}
-            handleDateChange={setEndDate}
-            format="dd/MM/yyyy"
-            formControlProps={{
-              fullWidth: true
-            }}
-          />
-        </GridItem>
-        <GridItem xs={12} sm={12} md={2}>
-          <Button onClick={getScale} color="primary">Pesquisar</Button>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={12}>
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Lista de Membros</h4>
-            </CardHeader>
-            <CardBody>
-              <Table
-                idColumn={"id"}
-                tableActions={[]}
-                tableHeaderColor="primary"
-                tableHead={["nome", "email", "nascimento"]}
-                tableData={scale}
-              />
-            </CardBody>
-            <CardFooter>
-              <Button onClick={doAssociate} color="primary">Associar Membro</Button>
-            </CardFooter>
-          </Card>
-        </GridItem>
-      </GridContainer>
+    <GridContainer>
+      <GridItem xs={12} sm={12} md={12}>
+        <Card>
+          <CardHeader color="primary">
+            <h4 className={classes.cardTitleWhite}>Escala</h4>
+          </CardHeader>
+          <CardBody>
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={6}>
+                <CustomInput
+                  id="beginDate"
+                  type="date"
+                  labelDate="Data Inicial"
+                  selectedDate={beginDate}
+                  handleDateChange={setBeginDate}
+                  format="dd/MM/yyyy"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                />
+              </GridItem>
+              <GridItem xs={12} sm={12} md={6}>
+                <CustomInput
+                  id="endDate"
+                  type="date"
+                  labelDate="Data Final"
+                  selectedDate={endDate}
+                  handleDateChange={setEndDate}
+                  format="dd/MM/yyyy"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                />
+              </GridItem>
+              <GridItem xs={12} sm={12} md={2}>
+                <Button onClick={getScale} color="primary">Pesquisar</Button>
+              </GridItem>
+            </GridContainer>
+            <GridContainer>
+              <GridItem xs={12} sm={12} md={12}>
+                {loading ?
+                  <LinearProgress /> :
+                  <Table
+                    idColumn={"id"}
+                    tableActions={[]}
+                    tableHeaderColor="primary"
+                    tableHead={["titulo", "data", "funcao", "nome", "justificativa", "status"]}
+                    tableData={scale}
+                  />}
+              </GridItem>
+            </GridContainer>
+          </CardBody>
+        </Card>
+      </GridItem>
+    </GridContainer>
   );
 }
