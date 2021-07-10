@@ -58,8 +58,8 @@ export default function ScaleReport(props) {
 
   async function getScale() {
     setLoading(true);
-    let beginDateStr = beginDate.toISOString().slice(0, 10) + "T" + beginDate.toLocaleTimeString("pt-br");
-    let endDateStr = endDate.toISOString().slice(0, 10) + "T" + endDate.toLocaleTimeString("pt-br");
+    let beginDateStr = beginDate.toISOString().slice(0, 10) + "T" + '00:00:00';
+    let endDateStr = endDate.toISOString().slice(0, 10) + "T" + '23:59:59';
     try {
       const user = UserService.getLoggedUser();
       await HttpService.getActivitiesByPeriod(user, props.currentMinistrieObject.id, beginDateStr, endDateStr)
