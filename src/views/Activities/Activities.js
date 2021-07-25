@@ -51,6 +51,7 @@ export default function Activities(props) {
   const [groupId, setGroupId] = React.useState("");
   const [apportionmentType, setApportionmentType] = React.useState("group");
   const [meberFunctions, setMeberFunctions] = React.useState(new Map());
+  const [id, setId] = React.useState(null)
   const classes = useStyles();
 
   function handleChange(event, value) {
@@ -175,6 +176,11 @@ export default function Activities(props) {
   }
 
   React.useEffect(() => {
+    if (props.match.params) {
+      console.log(props.match.params.id);
+      setId(props.match.params.id);
+      setLoading(false);
+    }
     getGroups();
   }, []);
 
@@ -191,6 +197,7 @@ export default function Activities(props) {
       {loading ? <LinearProgress /> : null}
       < GridContainer >
         <GridItem xs={12} sm={12} md={12}>
+          {id}
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Cadastrar Atividade</h4>

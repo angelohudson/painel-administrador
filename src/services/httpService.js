@@ -254,12 +254,18 @@ class HttpService {
 
 	addSchedule(user, ministrieId, schedules) {
 		const url = this._getUrl(`task/by-escala/` + ministrieId);
-		console.log(schedules);
-		console.log(url);
 		return axios(url, {
 			method: 'POST',
 			auth: user,
 			data: schedules
+		});
+	}
+
+	getEvents(user, ministrieId, startDate, endDate) {
+		const url = this._getUrl(`evento/by-periodo/` + ministrieId + '?dataInicio=' + startDate + '&dataFim=' + endDate);
+		return axios(url, {
+			method: 'GET',
+			auth: user,
 		});
 	}
 

@@ -35,7 +35,8 @@ import Groups from "views/Groups/Groups.js";
 import Functions from "views/Functions/Functions.js";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import BuildIcon from '@material-ui/icons/Build';
-import Calendar from 'views/Calendar/Calendar';
+import Events  from 'views/Events/Events';
+import EditEvents from 'views/Events/EditEvents';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import UserProfile from 'views/UserProfile/UserProfile';
 
@@ -105,11 +106,19 @@ const leaderRoute = [
     layout: "/admin"
   },
   {
-    path: "/calendar",
+    path: "/events",
     hidden: false,
-    name: "Calendário",
+    name: "Eventos",
     icon: EventIcon,
-    component: Calendar,
+    component: Events,
+    layout: "/admin"
+  },
+  {
+    path: "/edit-event/:id",
+    hidden: true,
+    name: "Evento",
+    icon: EventIcon,
+    component: Activities,
     layout: "/admin"
   },
   {
