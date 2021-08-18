@@ -36,7 +36,6 @@ import Functions from "views/Functions/Functions.js";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import BuildIcon from '@material-ui/icons/Build';
 import Events  from 'views/Events/Events';
-import EditEvents from 'views/Events/EditEvents';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import UserProfile from 'views/UserProfile/UserProfile';
 

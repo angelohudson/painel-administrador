@@ -80,7 +80,7 @@ export default function FunctionSelect(props) {
     return <TableRow>
         <TableCell>
             <CustomInput
-                labelText="Esse membro será escalado como: "
+                labelText="Escalado como: "
                 id={id + "function-name"}
                 inputProps={{ defaultValue: functionTitle }}
                 formControlProps={{ fullWidth: true }}

@@ -54,6 +54,14 @@ export default function Activities(props) {
   const [id, setId] = React.useState(null)
   const classes = useStyles();
 
+  function findActivity() {
+    await HttpService.getGroups(user, props.currentMinistrieObject.id)
+      .then((response) => {
+        setGroups(response.data);
+        setLoading(false);
+      });
+  }
+
   function handleChange(event, value) {
     if (value)
       setApportionmentType(value);
@@ -119,10 +127,6 @@ export default function Activities(props) {
       NotificationManager.warning("Campo descrição não preenchido");
       return false;
     }
-    if (!document.getElementById("sub-title").value) {
-      NotificationManager.warning("Campo sub-título não preenchido");
-      return false;
-    }
     if (!document.getElementById("title").value) {
       NotificationManager.warning("Campo título não preenchido");
       return false;
@@ -158,7 +162,7 @@ export default function Activities(props) {
         dataInicio: selectedDate.toLocaleDateString("pt-Br") + "T" + selectedDate.toLocaleTimeString("pt-br"),
         dataFim: selectedEndDate.toLocaleDateString("pt-Br") + "T" + selectedEndDate.toLocaleTimeString("pt-br"),
         descricao: document.getElementById("description").value,
-        subtitulo: document.getElementById("sub-title").value,
+        subtitulo: "",
         titulo: document.getElementById("title").value
       },
     };
@@ -169,7 +173,7 @@ export default function Activities(props) {
       dataInicio: selectedDate.toLocaleDateString("pt-Br") + "T" + selectedDate.toLocaleTimeString("pt-br"),
       dataFim: selectedEndDate.toLocaleDateString("pt-Br") + "T" + selectedEndDate.toLocaleTimeString("pt-br"),
       descricao: document.getElementById("description").value,
-      subtitulo: document.getElementById("sub-title").value,
+      subtitulo: "",
       titulo: document.getElementById("title").value
     };
     return activity;
@@ -195,9 +199,8 @@ export default function Activities(props) {
   return (
     <div>
       {loading ? <LinearProgress /> : null}
-      < GridContainer >
+      <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
-          {id}
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Cadastrar Atividade</h4>
@@ -205,18 +208,21 @@ export default function Activities(props) {
             </CardHeader>
             <CardBody>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
+                <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Título da Atividade"
                     id="title"
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      inputProps: {
+                        maxlength: 50,
+                      }
+                    }}
                   />
                 </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={3}>
+                <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     id="beginDate"
                     type="date"
@@ -229,7 +235,7 @@ export default function Activities(props) {
                     }}
                   />
                 </GridItem>
-                <GridItem xs={12} sm={12} md={3}>
+                <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     id="endDate"
                     type="date"
@@ -237,15 +243,6 @@ export default function Activities(props) {
                     labelDate="Data de fim da atividade"
                     handleDateChange={handleEndDateChange}
                     format="dd/MM/yyyy HH:mm"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="Sub título"
-                    id="sub-title"
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -262,7 +259,10 @@ export default function Activities(props) {
                     }}
                     inputProps={{
                       multiline: true,
-                      rows: 5
+                      rows: 5,
+                      inputProps: {
+                        maxlength: 255,
+                      }
                     }}
                   />
                 </GridItem>

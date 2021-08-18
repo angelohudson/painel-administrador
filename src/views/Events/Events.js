@@ -118,6 +118,14 @@ export default function Events(props) {
         }
     }
 
+    function removeEvent(id) {
+        const user = UserService.getLoggedUser();
+        setLoading(true);
+        EventService.deleteEvent(user, id).then((response) => {
+            getEvents();
+        });
+    }
+
     function formatDate(date) {
         return new Date(date).toLocaleDateString("pt-Br");
     }
@@ -145,7 +153,7 @@ export default function Events(props) {
                                 <div className={classes.description}>
                                     {formatDate(value.data)}
                                 </div>
-                                <IconButton onClick={function () { EventService.deleteEvent(value.id); }} aria-label="delete" color="danger">
+                                <IconButton onClick={function () { removeEvent(value.id) }} aria-label="delete" color="danger">
                                     <DeleteIcon />
                                 </IconButton>
                             </CardFooter>

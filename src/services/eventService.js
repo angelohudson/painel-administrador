@@ -1,6 +1,17 @@
+import axios from "axios";
+import Paths from "constants/paths";
+
 class EventService {
-    deleteEvent(id) {
-        console.log(id);
+    deleteEvent(user, id) {
+        const url = this._getUrl(`evento/${id}`);
+        return axios(url, {
+            method: 'DELETE',
+            auth: user
+        });
+    }
+
+    _getUrl(url) {
+        return `${Paths.API_ADTIMBO_PROD}/${url}`;
     }
 }
 
