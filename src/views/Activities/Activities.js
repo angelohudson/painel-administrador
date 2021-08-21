@@ -21,6 +21,8 @@ import UserService from 'services/userService';
 import HttpService from 'services/httpService';
 import { NotificationManager } from "react-notifications";
 import Schedule from "views/Schedule/Schedule";
+import eventService from "services/eventService";
+import { func } from "prop-types";
 
 const styles = {
   cardCategoryWhite: {
@@ -50,20 +52,34 @@ export default function Activities(props) {
   const [groups, setGroups] = React.useState([]);
   const [groupId, setGroupId] = React.useState("");
   const [apportionmentType, setApportionmentType] = React.useState("group");
+  const [lockChangeType, setLockChangeType] = React.useState(false);
   const [meberFunctions, setMeberFunctions] = React.useState(new Map());
-  const [id, setId] = React.useState(null)
+  const [id, setId] = React.useState(null);
+  const [titulo, setTitulo] = React.useState("");
+  const [descricao, setDescricao] = React.useState("");
   const classes = useStyles();
 
-  function findActivity() {
-    await HttpService.getGroups(user, props.currentMinistrieObject.id)
+  async function findActivity(id) {
+    if (id == null) return;
+    const user = UserService.getLoggedUser();
+    await eventService.findEvent(user, id)
       .then((response) => {
-        setGroups(response.data);
+        console.log(response.data);
+        setTitulo(response.data['titulo']);
+        setDescricao(response.data['descricao']);
+        setSelectedDate(new Date(response.data['data']));
+        setSelectedEndDate(new Date(response.data['dataFim']));
+        if (response.data['tipo'] == 'ESCALA')
+          setApportionmentType('schedule');
+        else if (response.data['tipo'] == 'GRUPO')
+          setApportionmentType('group');
+        setLockChangeType(true);
         setLoading(false);
       });
   }
 
   function handleChange(event, value) {
-    if (value)
+    if (value && !lockChangeType)
       setApportionmentType(value);
   }
 
@@ -96,29 +112,40 @@ export default function Activities(props) {
       return;
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
-      if (apportionmentType == 'group') {
+      const user = UserService.getLoggedUser();
+      if (id) {
+        eventService.updateEvent(user, groupId, getSchedule(), id).then((response) => {
+          setLoading(false); verifyBusyMembers(response);
+        });
+      } else if (apportionmentType == 'group') {
         if (groupId) {
-          await HttpService.addActivitiesByGroup(user, groupId, getActitvity()).then((response) => { setLoading(false); setGroupId(""); NotificationManager.success('Cadastrado com sucesso!'); });
+          await HttpService.addActivitiesByGroup(user, groupId, getActitvity()).then((response) => {
+            setLoading(false); setGroupId(""); NotificationManager.success('Cadastrado com sucesso!');
+          });
         } else {
-          await HttpService.addActivities(user, props.currentMinistrieObject.id, getActitvity()).then((response) => { setLoading(false); NotificationManager.success('Cadastrado com sucesso!'); });
+          await HttpService.addActivities(user, props.currentMinistrieObject.id, getActitvity()).then((response) => {
+            setLoading(false); NotificationManager.success('Cadastrado com sucesso!');
+          });
         }
       } else if (apportionmentType == 'schedule') {
         await HttpService.addSchedule(user, props.currentMinistrieObject.id, getSchedule()).then((response) => {
-          let busyMembers = response.data;
-          if (busyMembers.length) {
-            NotificationManager.warning('Alguns membros não estarão disponíveis nessa data');
-            busyMembers.forEach(busyMember => NotificationManager.warning(busyMember.membro.nome + " estará ocupado"));
-          } else {
-            NotificationManager.success('Cadastrado com sucesso!');
-          }
-          setLoading(false);
+          setLoading(false); verifyBusyMembers(response);
         });
       }
     } catch (e) {
       console.log(e.message);
       NotificationManager.warning(e.message);
       setLoading(false);
+    }
+  }
+
+  function verifyBusyMembers(response) {
+    let busyMembers = response.data;
+    if (busyMembers.length) {
+      NotificationManager.warning('Alguns membros não estarão disponíveis nessa data');
+      busyMembers.forEach(busyMember => NotificationManager.warning(busyMember.membro.nome + " estará ocupado"));
+    } else {
+      NotificationManager.success('Cadastrado com sucesso!');
     }
   }
 
@@ -163,6 +190,7 @@ export default function Activities(props) {
         dataFim: selectedEndDate.toLocaleDateString("pt-Br") + "T" + selectedEndDate.toLocaleTimeString("pt-br"),
         descricao: document.getElementById("description").value,
         subtitulo: "",
+        tipo: 'ESCALA',
         titulo: document.getElementById("title").value
       },
     };
@@ -174,7 +202,8 @@ export default function Activities(props) {
       dataFim: selectedEndDate.toLocaleDateString("pt-Br") + "T" + selectedEndDate.toLocaleTimeString("pt-br"),
       descricao: document.getElementById("description").value,
       subtitulo: "",
-      titulo: document.getElementById("title").value
+      titulo: document.getElementById("title").value,
+      tipo: 'GRUPO',
     };
     return activity;
   }
@@ -183,6 +212,7 @@ export default function Activities(props) {
     if (props.match.params) {
       console.log(props.match.params.id);
       setId(props.match.params.id);
+      findActivity(props.match.params.id);
       setLoading(false);
     }
     getGroups();
@@ -216,6 +246,8 @@ export default function Activities(props) {
                       fullWidth: true
                     }}
                     inputProps={{
+                      value: titulo,
+                      onChange: (event => setTitulo(event.target.value)),
                       inputProps: {
                         maxlength: 50,
                       }
@@ -258,6 +290,8 @@ export default function Activities(props) {
                       fullWidth: true
                     }}
                     inputProps={{
+                      value: descricao,
+                      onChange: (event => setDescricao(event.target.value)),
                       multiline: true,
                       rows: 5,
                       inputProps: {

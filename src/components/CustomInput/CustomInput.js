@@ -9,6 +9,8 @@ import Input from "@material-ui/core/Input";
 // @material-ui/icons
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
+// Locale
+import brLocale from "date-fns/locale/pt-BR";
 
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -65,7 +67,7 @@ export default function CustomInput(props) {
         </InputLabel>
       ) : null}
       {type === "date" ? (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider locale={brLocale} utils={DateFnsUtils}>
           <KeyboardDatePicker
             style={{marginTop: 0}}
             margin="normal"
