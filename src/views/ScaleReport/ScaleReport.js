@@ -66,8 +66,8 @@ export default function ScaleReport(props) {
         .then((response) => {
           setScale(response.data.filter((task) => task.funcaoEscala !== null).map(task => {
             return {
-              titulo: task.titulo,
-              data: new Date(task.data).toLocaleDateString("pt-Br") + " " + new Date(task.data).toLocaleTimeString("pt-Br"),
+              titulo: task.evento.titulo,
+              data: new Date(task.evento.data).toLocaleDateString("pt-Br") + " " + new Date(task.evento.data).toLocaleTimeString("pt-Br"),
               funcao: task.funcaoEscala,
               nome: task.membro.nome,
               status: task.status === 'DEFAULT' ? "AGUARDANDO" : task.status,
