@@ -1,25 +1,7 @@
-# [Painel de Cadastro de atividades]
+# Painel de Cadastro de atividades
 ![image](https://user-images.githubusercontent.com/74786258/138012670-599be5c9-4a10-4207-897a-e358ac78ba73.png)
 
-
-![version](https://img.shields.io/badge/version-1.9.0-blue.svg) ![license](https://img.shields.io/badge/license-MIT-blue.svg) [![GitHub issues open](https://img.shields.io/github/issues/creativetimofficial/material-dashboard-react.svg?maxAge=2592000)]() [![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/creativetimofficial/material-dashboard-react.svg?maxAge=2592000)]() [![Join the chat at https://gitter.im/NIT-dgp/General](https://badges.gitter.im/NIT-dgp/General.svg)](https://gitter.im/creative-tim/material-dashboard?utm_source=share-link&utm_medium=link&utm_campaign=share-link) [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/E4aHAQy)
-
-![Product Gif](src/assets/github/md-react.gif)
-
-Material Dashboard React is a free Material-UI Admin with a fresh, new design inspired by Google's Material Design. We are very excited to introduce our take on the material concepts through an easy to use and beautiful set of components. Material Dashboard React was built over the popular Material-UI framework.
-
-Material Dashboard React makes use of light, surface and movement. The general layout resembles sheets of paper following multiple different layers, so that the depth and order is obvious. The navigation stays mainly on the left sidebar and the content is on the right inside the main panel.
-
-Material Dashboard React comes with 5 color filter choices for both the sidebar and the card headers (blue, green, orange, red and purple) and an option to have a background image on the sidebar.
-
-Material Dashboard React was created using [create-react-app](https://github.com/facebook/create-react-app) and it uses a framework built by our friend [Olivier - Material-UI v3.1.0](https://github.com/mui-org/material-ui), who did an amazing job creating the backbone for the material effects, animations, ripples and transitions. Big thanks to his team for the effort and forward thinking they put into it.
-
-Special thanks go to:
-+ [React-chartist](https://github.com/fraserxu/react-chartist) for the wonderful charts.
-
-We are very excited to share this dashboard with you and we look forward to hearing your feedback!
-
-You can find the Github Repo here.
+O painel administrador é o local onde as lideranças podem realizar os cadastros de eventos e escalas que popularão os dados necessários aos apps mobile.
 
 ## Table of Contents
 
@@ -55,21 +37,6 @@ You can find the Github Repo here.
 | [![Start page](src/assets/github/dashboard.png)](https://demos.creative-tim.com/material-dashboard-react/#/dashboard) | [![User profile page](src/assets/github/user_profile.png)](https://demos.creative-tim.com/material-dashboard-react/#/user) | [![Tables page ](src/assets/github/tables.png)](https://demos.creative-tim.com/material-dashboard-react/#/table) | [![Maps Page](src/assets/github/maps.png)](https://demos.creative-tim.com/material-dashboard-react/#/maps) | [![Notification page](src/assets/github/notification.png)](https://demos.creative-tim.com/material-dashboard-react/#/notifications)
 
 [View More](https://demos.creative-tim.com/material-dashboard-react/#/dashboard).
-
-
-## Quick start
-
-Quick start options:
-
-- `npm i material-dashboard-react`
-- Clone the repo: `git clone https://github.com/creativetimofficial/material-dashboard-react.git`.
-- [Download from Github](https://github.com/creativetimofficial/material-dashboard-react/archive/master.zip).
-- [Download from Creative Tim](https://www.creative-tim.com/product/material-dashboard-react).
-
-
-## Documentation
-The documentation for the Material Dashboard React is hosted at our [website](https://demos.creative-tim.com/material-dashboard-react/#/documentation/tutorial).
-
 
 ## File Structure
 
