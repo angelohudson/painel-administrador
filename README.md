@@ -7,8 +7,6 @@ O painel administrador é o local onde as lideranças podem realizar os cadastro
 
 * [Versions](#versions)
 * [Demo](#demo)
-* [Quick Start](#quick-start)
-* [Documentation](#documentation)
 * [File Structure](#file-structure)
 * [Browser Support](#browser-support)
 * [Resources](#resources)
