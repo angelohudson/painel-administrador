@@ -1,4 +1,6 @@
-# [Painel de Cadastro de atividades](https://user-images.githubusercontent.com/74786258/138012526-3d229b38-ee29-47e6-ba91-a571ee2bbd83.png)
+# [Painel de Cadastro de atividades]
+![image](https://user-images.githubusercontent.com/74786258/138012670-599be5c9-4a10-4207-897a-e358ac78ba73.png)
+
 
 ![version](https://img.shields.io/badge/version-1.9.0-blue.svg) ![license](https://img.shields.io/badge/license-MIT-blue.svg) [![GitHub issues open](https://img.shields.io/github/issues/creativetimofficial/material-dashboard-react.svg?maxAge=2592000)]() [![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/creativetimofficial/material-dashboard-react.svg?maxAge=2592000)]() [![Join the chat at https://gitter.im/NIT-dgp/General](https://badges.gitter.im/NIT-dgp/General.svg)](https://gitter.im/creative-tim/material-dashboard?utm_source=share-link&utm_medium=link&utm_campaign=share-link) [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/E4aHAQy)
 
