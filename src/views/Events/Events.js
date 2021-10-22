@@ -13,6 +13,8 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import CustomInput from "components/CustomInput/CustomInput";
+import Button from "components/CustomButtons/Button.js";
 
 import UserService from 'services/userService';
 import HttpService from 'services/httpService';
@@ -20,6 +22,7 @@ import EventService from 'services/eventService';
 import { NotificationManager } from 'react-notifications';
 
 import { grayColor } from "assets/jss/material-dashboard-react.js";
+import { OperationCanceledException } from "typescript";
 
 const styles = {
     cardCategoryWhite: {
@@ -94,16 +97,13 @@ const useStyles = makeStyles(styles);
 export default function Events(props) {
     const [loading, setLoading] = React.useState({ ...props.loading });
     const [events, setEvents] = React.useState([])
+    const [beginDate, setBeginDate] = React.useState(new Date());
+    const [endDate, setEndDate] = React.useState(new Date());
     const classes = useStyles();
 
     async function getEvents() {
-        var beginDate = new Date();
-        var endDate = new Date();
-        beginDate.setDate(beginDate.getDate() - beginDate.getDay())
-        endDate.setDate(6 - endDate.getDay() + endDate.getDate());
-
-        let beginDateStr = beginDate.toISOString().slice(0, 10) + "T" + '00:00:00';
-        let endDateStr = endDate.toISOString().slice(0, 10) + "T" + '23:59:59';
+        let beginDateStr = beginDate.getFullYear() + "-" + (beginDate.getMonth() + 1) + "-" + (beginDate.getDate() < 10 ? "0" : "") + beginDate.getDate() + "T" + '00:00:00';
+        let endDateStr = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + (endDate.getDate() < 10 ? "0" : "") + endDate.getDate() + "T" + '23:59:59';
         setLoading(true);
         try {
             const user = UserService.getLoggedUser()
@@ -131,12 +131,49 @@ export default function Events(props) {
     }
 
     React.useEffect(() => {
-        getEvents();
+        setLoading(false);
     }, []);
 
     return (
         loading ? <LinearProgress /> :
             <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                    <Card>
+                        <CardBody>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={6}>
+                                    <CustomInput
+                                        id="beginDate"
+                                        type="date"
+                                        labelDate="Data Inicial"
+                                        selectedDate={beginDate}
+                                        handleDateChange={setBeginDate}
+                                        format="dd/MM/yyyy"
+                                        formControlProps={{
+                                            fullWidth: true
+                                        }}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={6}>
+                                    <CustomInput
+                                        id="endDate"
+                                        type="date"
+                                        labelDate="Data Final"
+                                        selectedDate={endDate}
+                                        handleDateChange={setEndDate}
+                                        format="dd/MM/yyyy"
+                                        formControlProps={{
+                                            fullWidth: true
+                                        }}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={2}>
+                                    <Button onClick={function () { getEvents(); }} color="primary">Pesquisar</Button>
+                                </GridItem>
+                            </GridContainer>
+                        </CardBody>
+                    </Card>
+                </GridItem>
                 {events.map((value, index) => {
                     return (<GridItem key={index} xs={12} sm={12} md={4}>
                         <Card >

@@ -263,6 +263,7 @@ class HttpService {
 
 	getEvents(user, ministrieId, startDate, endDate) {
 		const url = this._getUrl(`evento/by-periodo/` + ministrieId + '?dataInicio=' + startDate + '&dataFim=' + endDate);
+		console.log(url);
 		return axios(url, {
 			method: 'GET',
 			auth: user,
