@@ -90,8 +90,8 @@ export default function MemberList(props) {
   }
 
   function doEdit(id) {
-    NotificationManager.warning("Funcionalidade ainda não implementada");
-    //props.history.push('/admin/update-member/' + id);
+    //NotificationManager.warning("Funcionalidade ainda não implementada");
+    props.history.push('/admin/update-member/' + id);
   }
 
   React.useEffect(() => {

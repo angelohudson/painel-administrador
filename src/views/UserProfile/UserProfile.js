@@ -228,8 +228,8 @@ export default function UserProfile(props) {
 
   async function handleSubmit() {
     const user = UserService.getLoggedUser();
-    let birth = selectedDate.toISOString().slice(0, 10);
-    if (password !== "" && cpf.length === 14 && name !== "" && phone !== "" && birth !== "" && cep.length === 9 && uf !== "" && city !== "" && district !== null && place !== "" && number !== "") {
+    let birth = selectedDate.getFullYear() + "-" + (selectedDate.getMonth() < 9 ? "0" : "") + (selectedDate.getMonth() + 1) + "-" + (selectedDate.getDate() < 10 ? "0" : "") + selectedDate.getDate();
+    if (name !== "" && phone !== "" && birth !== "" && cep.length === 9 && uf !== "" && city !== "" && district !== null && place !== "" && number !== "") {
       if (email !== "" && !EmailValidator.validate(email)) {
         NotificationManager.error(`Email inválido!`);
         return;
@@ -242,18 +242,47 @@ export default function UserProfile(props) {
         NotificationManager.error(`Data de nascimento inválida!`);
         return;
       }
-      const member = { "email": email, "cpf": cpf, "nome": name, "telefone": phone, "nascimento": birth, "password": password, "endereco": { "bairro": district, "cep": cep, "complemento": complement, "localidade": city, "logradouro": place, "uf": uf, "numero": number } };
+
+      let member = {
+        "email": email,
+        "nome": name,
+        "telefone": phone,
+        "nascimento": birth,
+        "endereco": {
+          "bairro": district,
+          "cep": cep,
+          "complemento": complement,
+          "localidade": city,
+          "logradouro": place,
+          "uf": uf,
+          "numero": number
+        }
+      };
+
+      if (id === null && (password == "" || cpf.length !== 14)) {
+        NotificationManager.error(`CPF e Senha obrigatório!`);
+        return;
+      } else if (id === null) {
+        member["cpf"] = cpf;
+        member["password"] = password;
+      }
+
       try {
-        await HttpService.saveMember(user, member)
-          .then((response) => {
-            console.log(response);
+        let method = null;
+        if (id !== null)
+          method = HttpService.updateMember(user, member, id);
+        else
+          method = HttpService.saveMember(user, member);
+        method.then((response) => {
+          console.log(response);
+          NotificationManager.success(`Cadastro de ${member.nome} registrado!`);
+          if (photo)
             HttpService.savePhoto(user, response.data.id, photo)
               .then((response) => {
                 UserService.saveLoggedUser(user);
-                NotificationManager.success(`Membro ${member.nome} cadastrado!`);
-                props.history.push('/admin/ministrie');
+                NotificationManager.success(`Foto cadastrado!`);
               });
-          });
+        });
       } catch (e) {
         console.log(e.message);
       }
@@ -262,10 +291,37 @@ export default function UserProfile(props) {
     }
   }
 
+  async function findProfile(id) {
+    const user = UserService.getLoggedUser();
+    setId(id);
+    try {
+      HttpService.getMember(user, id).then((response) => {
+        console.log(response);
+        let data = response.data;
+        setEmail(data["email"]);
+        setCpf(data["cpf"]);
+        setName(data["nome"]);
+        setPhone(data["telefone"]);
+        setSelectedDate(new Date(data["nascimento"] + "T00:00:00"));
+        setPassword(data["password"]);
+        setDistrict(data["endereco"]["bairro"]);
+        setCep(data["endereco"]["cep"]);
+        setComplement(data["endereco"]["complemento"]);
+        setCity(data["endereco"]["localidade"]);
+        setPlace(data["endereco"]["logradouro"]);
+        setUf(data["endereco"]["uf"]);
+        setNumber(data["endereco"]["numero"]);
+      });
+    } catch (e) {
+      NotificationManager.error(`Erro ao consultar!`);
+      console.log(e.message);
+    }
+  }
+
   React.useEffect(() => {
-    if (props.match.params) {
+    if (props.match.params && props.match.params.id !== undefined) {
       console.log(props.match.params.id);
-      setId(props.match.params.id);
+      findProfile(props.match.params.id);
     }
   }, []);
 
@@ -306,9 +362,11 @@ export default function UserProfile(props) {
                       fullWidth: true
                     }}
                     inputProps={{
+                      disabled: id !== null,
                       type: "text",
                       onChange: (event => setCpf(cpfMask(event.target.value))),
-                      value: cpf
+                      value: cpf,
+                      autoComplete: "off"
                     }}
                   />
                 </GridItem>
@@ -320,9 +378,11 @@ export default function UserProfile(props) {
                       fullWidth: true
                     }}
                     inputProps={{
+                      disabled: id !== null,
                       type: "password",
                       onChange: (event => setPassword(event.target.value)),
-                      value: password
+                      value: password,
+                      autoComplete: "off"
                     }}
                   />
                 </GridItem>

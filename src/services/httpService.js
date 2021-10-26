@@ -19,6 +19,15 @@ class HttpService {
 		});
 	}
 
+	updateMember(user, member, id) {
+		const url = this._getUrl(`membro/${id}`);
+		return axios(url, {
+			method: 'PUT',
+			auth: user,
+			data: member
+		});
+	}
+
 	saveMember(user, member) {
 		const url = this._getUrl('membro');
 		return axios(url, {
@@ -61,6 +70,14 @@ class HttpService {
 
 	getMembers(user, ministrieId) {
 		const url = this._getUrl(`membro/by-ministerio/${ministrieId}`);
+		return axios(url, {
+			method: 'GET',
+			auth: user
+		});
+	}
+
+	getMember(user, memberId) {
+		const url = this._getUrl(`membro/${memberId}`);
 		return axios(url, {
 			method: 'GET',
 			auth: user

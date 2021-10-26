@@ -102,8 +102,8 @@ export default function Events(props) {
     const classes = useStyles();
 
     async function getEvents() {
-        let beginDateStr = beginDate.getFullYear() + "-" + (beginDate.getMonth() + 1) + "-" + (beginDate.getDate() < 10 ? "0" : "") + beginDate.getDate() + "T" + '00:00:00';
-        let endDateStr = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + (endDate.getDate() < 10 ? "0" : "") + endDate.getDate() + "T" + '23:59:59';
+        let beginDateStr = beginDate.getFullYear() + "-" + (beginDate.getMonth() < 9 ? "0" : "") + (beginDate.getMonth() + 1) + "-" + (beginDate.getDate() < 10 ? "0" : "") + beginDate.getDate() + "T" + '00:00:00';
+        let endDateStr = endDate.getFullYear() + "-" + (endDate.getMonth() < 9 ? "0" : "") + (endDate.getMonth() + 1) + "-" + (endDate.getDate() < 10 ? "0" : "") + endDate.getDate() + "T" + '23:59:59';
         setLoading(true);
         try {
             const user = UserService.getLoggedUser()

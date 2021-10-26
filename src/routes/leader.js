@@ -35,7 +35,7 @@ import Groups from "views/Groups/Groups.js";
 import Functions from "views/Functions/Functions.js";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import BuildIcon from '@material-ui/icons/Build';
-import Events  from 'views/Events/Events';
+import Events from 'views/Events/Events';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import UserProfile from 'views/UserProfile/UserProfile';
 
@@ -62,6 +62,14 @@ const leaderRoute = [
     name: "Associar Membros",
     icon: GroupAddIcon,
     component: AssociateMembers,
+    layout: "/admin"
+  },
+  {
+    path: "/add-member/",
+    hidden: false,
+    name: "Cadastro de Membro",
+    icon: PersonAddIcon,
+    component: UserProfile,
     layout: "/admin"
   },
   {
