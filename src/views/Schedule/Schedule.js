@@ -30,7 +30,7 @@ export default function Schedule(props) {
   async function getFunctions() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser();
+      const user = UserService.getAccessToken();
       await HttpService.getFunctions(user, currentMinistrieObject.id)
         .then((response) => {
           setFunctions(response.data);
@@ -45,7 +45,7 @@ export default function Schedule(props) {
   async function getGroups() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.getGroups(user, currentMinistrieObject.id)
         .then((response) => {
           setGroups(response.data);

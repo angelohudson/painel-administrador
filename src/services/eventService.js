@@ -5,31 +5,27 @@ class EventService {
 
     updateEvent(user, ministrieId, schedules, id) {
         const url = this._getUrl(`evento/${id}` + ministrieId);
-        return axios(url, {
-            method: 'PUT',
-            auth: user,
-            data: schedules
+        return axios.put(url, schedules, {
+            headers: { 'Authorization': user }
         });
     }
 
     deleteEvent(user, id) {
         const url = this._getUrl(`evento/${id}`);
-        return axios(url, {
-            method: 'DELETE',
-            auth: user
+        return axios.delete(url, {
+            headers: { 'Authorization': user }
         });
     }
 
     findEvent(user, id) {
         const url = this._getUrl(`evento/${id}`);
-        return axios(url, {
-            method: 'GET',
-            auth: user
+        return axios.get(url, {
+            headers: { 'Authorization': user }
         });
     }
 
     _getUrl(url) {
-        return `${Paths.API_ADTIMBO_PROD}/${url}`;
+        return `${Paths.API_TASK_ADTIMBO_PROD}/${url}`;
     }
 }
 

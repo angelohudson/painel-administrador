@@ -61,7 +61,7 @@ export default function Groups(props) {
     async function getGroups() {
         setLoading(true);
         try {
-            const user = UserService.getLoggedUser()
+            const user = UserService.getAccessToken()
             await HttpService.getGroups(user, props.currentMinistrieObject.id)
                 .then((response) => {
                     setGroups(response.data);

@@ -70,7 +70,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
   async function getMembers(id) {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.getMembersNotAssociateOnGroup(user, ministerId, id)
         .then((response) => {
           setMembersNotAssociated(response.data);
@@ -90,7 +90,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
   async function doAssociate() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser();
+      const user = UserService.getAccessToken();
       await HttpService.associateMembersOnGroup(user, tableCheckedIndexNotAssociated, id)
         .then((response) => {
           console.log(response);
@@ -106,7 +106,7 @@ const AssociateMembersGroup = React.forwardRef((props, ref) => {
   async function doRemove() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser();
+      const user = UserService.getAccessToken();
       await HttpService.removeMembersOnGroup(user, tableCheckedIndex, id)
         .then((response) => {
           console.log(response);

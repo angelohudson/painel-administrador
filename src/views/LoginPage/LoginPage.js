@@ -41,11 +41,10 @@ export default function LoginPage({ ...rest }) {
 
     async function handleSubmit() {
         setLoading(true);
-        const user = { username: username, password: password };
         try {
-            await HttpService.login(user)
+            await HttpService.login(username, password)
                 .then((response) => {
-                    UserService.saveLoggedUser(user);
+                    UserService.saveAccessToken(response.data);
                     NotificationManager.success('Bem vindo!');
                     setLoading(false);
                     rest.history.push('/');

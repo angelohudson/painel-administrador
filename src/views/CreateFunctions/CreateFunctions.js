@@ -49,7 +49,7 @@ export default function CreateFunction(props) {
   async function doCreateFunction() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.createFunction(user, currentMinistrieId, functionName)
         .then((response) => {
           setLoading(false);

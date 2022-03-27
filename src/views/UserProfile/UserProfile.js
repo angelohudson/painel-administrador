@@ -227,7 +227,7 @@ export default function UserProfile(props) {
   }
 
   async function handleSubmit() {
-    const user = UserService.getLoggedUser();
+    const user = UserService.getAccessToken();
     let birth = selectedDate.getFullYear() + "-" + (selectedDate.getMonth() < 9 ? "0" : "") + (selectedDate.getMonth() + 1) + "-" + (selectedDate.getDate() < 10 ? "0" : "") + selectedDate.getDate();
     if (name !== "" && phone !== "" && birth !== "" && cep.length === 9 && uf !== "" && city !== "" && district !== null && place !== "" && number !== "") {
       if (email !== "" && !EmailValidator.validate(email)) {
@@ -279,7 +279,6 @@ export default function UserProfile(props) {
           if (photo)
             HttpService.savePhoto(user, response.data.id, photo)
               .then((response) => {
-                UserService.saveLoggedUser(user);
                 NotificationManager.success(`Foto cadastrado!`);
               });
         });
@@ -292,7 +291,7 @@ export default function UserProfile(props) {
   }
 
   async function findProfile(id) {
-    const user = UserService.getLoggedUser();
+    const user = UserService.getAccessToken();
     setId(id);
     try {
       HttpService.getMember(user, id).then((response) => {

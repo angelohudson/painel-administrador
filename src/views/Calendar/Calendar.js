@@ -37,7 +37,7 @@ export default class Calendar extends React.PureComponent {
         let beginDateStr = beginDate.toISOString().slice(0, 10) + "T" + beginDate.toLocaleTimeString("pt-br");
         let endDateStr = endDate.toISOString().slice(0, 10) + "T" + endDate.toLocaleTimeString("pt-br");
 
-        const user = userService.getLoggedUser();
+        const user = userService.getAccessToken();
         httpService.getActivitiesByPeriod(user, this.ministrie, beginDateStr, endDateStr).then((response) => {
             console.log(response);
             this.setState((state, props) => {

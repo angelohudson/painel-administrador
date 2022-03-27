@@ -50,7 +50,7 @@ export default function CreateGroup(props) {
   async function doCreateGroup() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.createGroup(user, currentMinistrieId, groupName)
         .then((response) => {
           setLoading(false);

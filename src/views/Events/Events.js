@@ -106,7 +106,7 @@ export default function Events(props) {
         let endDateStr = endDate.getFullYear() + "-" + (endDate.getMonth() < 9 ? "0" : "") + (endDate.getMonth() + 1) + "-" + (endDate.getDate() < 10 ? "0" : "") + endDate.getDate() + "T" + '23:59:59';
         setLoading(true);
         try {
-            const user = UserService.getLoggedUser()
+            const user = UserService.getAccessToken()
             await HttpService.getEvents(user, props.currentMinistrieObject.id, beginDateStr, endDateStr)
                 .then((response) => {
                     setEvents(response.data);
@@ -119,7 +119,7 @@ export default function Events(props) {
     }
 
     function removeEvent(id) {
-        const user = UserService.getLoggedUser();
+        const user = UserService.getAccessToken();
         setLoading(true);
         EventService.deleteEvent(user, id).then((response) => {
             getEvents();

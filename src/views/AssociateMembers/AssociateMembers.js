@@ -56,7 +56,7 @@ export default function AssociateMembers(props) {
 
   async function getMembers() {
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.getMembersNotAssociate(user, props.currentMinistrieObject.id)
         .then((response) => {
           setMembers(response.data);
@@ -72,7 +72,7 @@ export default function AssociateMembers(props) {
   async function doAssociate() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.associateMembers(user, tableCheckedIndex, props.currentMinistrieObject.id)
         .then((response) => {
           setLoading(false);

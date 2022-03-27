@@ -17,7 +17,7 @@ export default function FunctionSelect(props) {
     async function getMebersByFunctionId() {
         try {
             setLoading(true);
-            const user = UserService.getLoggedUser();
+            const user = UserService.getAccessToken();
             await HttpService.getMembersByFunction(user, functionId)
                 .then((response) => {
                     setMembers(response.data.map((f) => f.membro));
@@ -32,7 +32,7 @@ export default function FunctionSelect(props) {
     async function getMebersByGroupId() {
         try {
             setLoading(true);
-            const user = UserService.getLoggedUser();
+            const user = UserService.getAccessToken();
             await HttpService.getMembersByGroup(user, groupId)
                 .then((response) => {
                     setMembers(response.data);
@@ -47,7 +47,7 @@ export default function FunctionSelect(props) {
     async function getMebersByMinisterId() {
         try {
             setLoading(true);
-            const user = UserService.getLoggedUser();
+            const user = UserService.getAccessToken();
             await HttpService.getMembers(user, ministerId)
                 .then((response) => {
                     setMembers(response.data);

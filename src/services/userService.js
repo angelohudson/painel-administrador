@@ -1,44 +1,30 @@
 class UserService {
 
-	saveLoggedUser(user) {
-		const encodedUser = this._encodeUser(user);
-		localStorage.setItem('credentials', encodedUser);
+	saveAccessToken(data) {
+		let loginDate = new Date();
+		let expirationIn = new Date(new Date().getTime() + data['expirationIn']).getTime();
+		localStorage.setItem('expirationIn', expirationIn);
+		localStorage.setItem('credentials', "Bearer " + data['accessToken']);
 	}
 
-	getLoggedUser() {
-		const encodedUser = localStorage.getItem('credentials');
-		return this._decodeUser(encodedUser);
+	getAccessToken() {
+		return localStorage.getItem('credentials');
 	}
 
-	hasLoggedUser() {
-		const loggedUser = this.getLoggedUser();
-		return loggedUser.username;
+	getExpirationIn() {
+		return localStorage.getItem('expirationIn');
+	}
+
+	hasAccessToken() {
+		let expirationIn = this.getExpirationIn();
+		if (expirationIn > new Date().getTime())
+			return this.getAccessToken();
+		return false;
 	}
 
 	logout() {
 		localStorage.removeItem('credentials');
 		localStorage.removeItem('authorities');
-	}
-
-	_encodeUser(user) {
-		return window.btoa(`${user.username}~${user.password}`);
-	}
-
-	_decodeUser(encodedUser) {
-		const userString = window.atob(encodedUser);
-		const parts = userString.split('~');
-		if (parts.length === 2)
-			return { username: parts[0], password: parts[1] };
-
-		return {};
-	}
-
-	saveAuthorities(authorities) {
-		localStorage.setItem('authorities', authorities);
-	}
-
-	getAuthorities() {
-		return localStorage.getItem('authorities');
 	}
 }
 

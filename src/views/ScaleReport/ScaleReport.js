@@ -61,7 +61,7 @@ export default function ScaleReport(props) {
     let beginDateStr = beginDate.toISOString().slice(0, 10) + "T" + '00:00:00';
     let endDateStr = endDate.toISOString().slice(0, 10) + "T" + '23:59:59';
     try {
-      const user = UserService.getLoggedUser();
+      const user = UserService.getAccessToken();
       await HttpService.getActivitiesByPeriod(user, props.currentMinistrieObject.id, beginDateStr, endDateStr)
         .then((response) => {
           setScale(response.data.filter((task) => task.funcaoEscala !== null).map(task => {

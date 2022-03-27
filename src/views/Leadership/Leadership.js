@@ -57,7 +57,7 @@ export default function Leadership(props) {
     async function getLeaders() {
         setLoading(true);
         try {
-            const user = UserService.getLoggedUser()
+            const user = UserService.getAccessToken()
             console.log(props.currentMinistrieObject.id);
             await HttpService.getLeadership(user, props.currentMinistrieObject.id)
                 .then((response) => {
@@ -78,7 +78,7 @@ export default function Leadership(props) {
 
     async function doRemove(id) {
         try {
-            const user = UserService.getLoggedUser()
+            const user = UserService.getAccessToken()
             await HttpService.removeMemberOnLeadership(user, id)
                 .then((response) => {
                     console.log(response);

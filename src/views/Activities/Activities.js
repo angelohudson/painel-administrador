@@ -61,7 +61,7 @@ export default function Activities(props) {
 
   async function findActivity(id) {
     if (id == null) return;
-    const user = UserService.getLoggedUser();
+    const user = UserService.getAccessToken();
     await eventService.findEvent(user, id)
       .then((response) => {
         console.log(response.data);
@@ -94,7 +94,7 @@ export default function Activities(props) {
   async function getGroups() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.getGroups(user, props.currentMinistrieObject.id)
         .then((response) => {
           setGroups(response.data);
@@ -112,7 +112,7 @@ export default function Activities(props) {
       return;
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser();
+      const user = UserService.getAccessToken();
       if (id) {
         eventService.updateEvent(user, groupId, getSchedule(), id).then((response) => {
           setLoading(false); verifyBusyMembers(response);

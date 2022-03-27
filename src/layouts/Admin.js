@@ -102,7 +102,7 @@ export default function Admin({ ...rest }) {
 
     async function getMe() {
         try {
-            const user = UserService.getLoggedUser()
+            const user = UserService.getAccessToken()
             await HttpService.getMe(user)
                 .then((response) => {
                     setUser(response.data);
@@ -116,7 +116,7 @@ export default function Admin({ ...rest }) {
 
     async function getMinistries() {
         try {
-            const user = UserService.getLoggedUser()
+            const user = UserService.getAccessToken()
             await HttpService.getMinistries(user)
                 .then((response) => {
                     setMinistries(response.data);
@@ -148,7 +148,7 @@ export default function Admin({ ...rest }) {
     }, [mainPanel]);
 
     React.useEffect(() => {
-        if (!UserService.hasLoggedUser()) {
+        if (!UserService.hasAccessToken()) {
             rest.history.push('/login')
             NotificationManager.warning('Por favor, autentique-se');
             return

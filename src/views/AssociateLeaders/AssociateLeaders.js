@@ -57,7 +57,7 @@ export default function AssociateLeaders(props) {
   async function getMembers() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.getMembersNotAssociateWithLeadership(user, props.currentMinistrieObject.id)
         .then((response) => {
           setMembers(response.data);
@@ -73,7 +73,7 @@ export default function AssociateLeaders(props) {
   async function doAssociate() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.associateLeadership(user, tableCheckedIndex, props.currentMinistrieObject.id)
         .then((response) => {
           setLoading(false);

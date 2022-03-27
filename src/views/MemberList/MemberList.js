@@ -58,7 +58,7 @@ export default function MemberList(props) {
   async function getMembers() {
     setLoading(true);
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.getMembers(user, props.currentMinistrieObject.id)
         .then((response) => {
           setMembers(response.data);
@@ -77,7 +77,7 @@ export default function MemberList(props) {
 
   async function doRemove(id) {
     try {
-      const user = UserService.getLoggedUser()
+      const user = UserService.getAccessToken()
       await HttpService.removeMemberOnMinistry(user, id, props.currentMinistrieObject.id)
         .then((response) => {
           console.log(response);
