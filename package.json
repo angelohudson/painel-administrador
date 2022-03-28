@@ -35,7 +35,8 @@
     "react-scripts": "3.4.1",
     "react-swipeable-views": "0.13.9",
     "react-webcam": "^5.2.2",
-    "typescript": "3.9.3"
+    "typescript": "3.9.3",
+    "react-http-client": "1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
